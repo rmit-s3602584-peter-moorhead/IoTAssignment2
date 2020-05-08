@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block title %}Cars{% endblock %}
+
+{% block content %}
+<h2>Car Search</h2>
+<p>This is where you can search and book cars.</p>
+<table>
+<TR>
+	<TH>Id</TH>
+	<TH>Make</TH>
+	<TH>Body Type</TH>
+	<TH>Colour</TH>
+	<TH>Seats</TH>
+	<TH>Location</TH>
+	<TH>Cost</TH>
+	<TH>BookedBy</TH>
+</TR>
+
+{% for row in cars %}
+<TR>
+	<TD>{{row.id}}</TD>
+	<TD>{{row.make}}</TD>
+	<TD>{{row.bodyType}}</TD>
+	<TD>{{row.colour}}</TD>
+	<TD>{{row.seats}}</TD>
+	<TD>{{row.location}}</TD>
+	<TD>{{row.cost}}</TD>
+	<TD>{{row.bookedBy}}</TD>
+</TR>
+{% endfor %}
+</table>
+{% endblock %}

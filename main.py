@@ -133,3 +133,16 @@ def profile():
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/pythonlogin/cars')
+def cars():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # We need all the account info for the user so we can display it on the profile page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM cars')
+        cars = cursor.fetchall()
+        # Show the profile page with account info
+        return render_template('cars.html', cars=cars)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
