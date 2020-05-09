@@ -22,9 +22,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             data = conn.recv(4096)
             if(not data):
                 break
-            print("Received {} bytes of data decoded to: '{}'".format(
-                len(data), data.decode()))
-            print("Sending data back.")
+            print(data.decode())
+            
             conn.sendall(data)
         
         print("Disconnecting from client.")

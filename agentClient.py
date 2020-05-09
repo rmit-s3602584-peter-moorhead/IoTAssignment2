@@ -20,11 +20,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
     while True:
         message = input("Enter message (blank input to end): ")
-        message = message + " " + (now.strftime("%Y-%m-%d %H:%M:%S"))
+        time = (now.strftime("%Y-%m-%d %H:%M:%S"))
         if(not message):
             break
         
         s.sendall(message.encode())
+        s.sendall(time.encode())
         data = s.recv(4096)
         print("Received {} bytes of data decoded to: '{}'".format(
             len(data), data.decode()))
