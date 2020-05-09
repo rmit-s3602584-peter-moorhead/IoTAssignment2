@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, url_for, session, redirect
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
+import socket
 
 app = Flask(__name__)
 
@@ -38,6 +39,8 @@ app.config['MYSQL_DB'] = 'Peopl'
 
 # Intialize MySQL
 mysql = MySQL(app)
+
+
 
 
 
@@ -157,3 +160,37 @@ def cars():
 
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')
+
+
+##################Socket test
+localIP     = "127.0.0.1"
+localPort   = 20001
+bufferSize  = 1024
+
+msgFromServer       = "Hello UDP Client"
+otherMsgFromServer       = "no UDP Client"
+bytesToSend         = str.encode(msgFromServer)
+otherBytesToSend    = str.encode(otherMsgFromServer)
+
+UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+
+# Bind to address and ip
+UDPServerSocket.bind((localIP, localPort))
+print("UDP server up and listening")
+
+# Listen for incoming datagrams
+while(True):
+
+    bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+    message = bytesAddressPair[0]
+    address = bytesAddressPair[1]
+    clientMsg = "Message from Client:{}".format(message)
+    clientIP  = "Client IP Address:{}".format(address)
+    
+    print(clientMsg)
+    print(clientIP)
+
+    # Sending a reply to client
+    UDPServerSocket.sendto(bytesToSend, address)
+
+
