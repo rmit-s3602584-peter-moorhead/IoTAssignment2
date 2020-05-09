@@ -6,7 +6,8 @@ import re
 
 app = Flask(__name__)
 
-# Change this to your secret key (can be anything, it's for extra protection)
+
+# Didn't work without secret key, didn't matter what it is
 app.secret_key = 'your secret key'
 
 #create table if not exists Person (
@@ -38,7 +39,13 @@ app.config['MYSQL_DB'] = 'Peopl'
 # Intialize MySQL
 mysql = MySQL(app)
 
-@app.route('/pythonlogin/', methods=['GET', 'POST'])
+
+
+#@app.route('/')
+#def index():
+#    return 'Hello world'
+
+@app.route('/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
     msg = ''
@@ -67,7 +74,7 @@ def login():
     return render_template('index.html', msg=msg)
 
 # http://localhost:5000/python/logout - this will be the logout page
-@app.route('/pythonlogin/logout')
+@app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
    session.pop('loggedin', None)
@@ -77,7 +84,7 @@ def logout():
    return redirect(url_for('login'))
 
 # http://localhost:5000/pythinlogin/register - this will be the registration page, we need to use both GET and POST requests
-@app.route('/pythonlogin/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     # Output message if something goes wrong...
     msg = ''
@@ -112,7 +119,7 @@ def register():
     return render_template('register.html', msg=msg)
 
 # http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
-@app.route('/pythonlogin/home')
+@app.route('/home')
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -121,7 +128,7 @@ def home():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/pythonlogin/profile')
+@app.route('/profile')
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -134,7 +141,7 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/pythonlogin/cars')
+@app.route('/cars')
 def cars():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -146,3 +153,7 @@ def cars():
         return render_template('cars.html', cars=cars)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=80, host='0.0.0.0')
