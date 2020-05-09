@@ -20,11 +20,32 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
         while True:
             data = conn.recv(4096)
-            if(not data):
-                break
-            print(data.decode())
             
-            conn.sendall(data)
+            print(data.decode())
+            reply = data.decode()
+            if reply == "1":
+                username = conn.recv(4096)
+                us = username.decode()
+                print("username is: {}".format(us))
+                
+                password = conn.recv(4096)
+                pa = password.decode()
+                print("password is: {}".format(pa))
+                if us == "user" and pa == "pass":
+                    msg = "true"
+                    #s.sendall = (msg.encode())
+                    print("test 1")
+                else:
+                    msg = "false"
+                    #s.sendall = (msg.encode())
+                    print("test 2")
+                    break
+                
+                conn.sendall(msg.encode())
+                
+                    
+            
+            
         
         print("Disconnecting from client.")
     print("Closing listening socket.")
