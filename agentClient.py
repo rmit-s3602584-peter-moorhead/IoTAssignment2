@@ -3,8 +3,11 @@
 # Documentation: https://docs.python.org/3/library/socket.html
 
 import socket
+import datetime
 
 HOST = input("Enter IP address of server: ")
+
+now = datetime.datetime.now()
 
 # HOST = "127.0.0.1" # The server's hostname or IP address.
 PORT = 65000         # The port used by the server.
@@ -17,6 +20,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
     while True:
         message = input("Enter message (blank input to end): ")
+        message = message + " " + (now.strftime("%Y-%m-%d %H:%M:%S"))
         if(not message):
             break
         
