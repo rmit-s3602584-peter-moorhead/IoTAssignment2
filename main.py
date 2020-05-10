@@ -174,5 +174,54 @@ def carManagement():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/carQuery', methods=['GET', 'POST'])
+def carQuery():
+    if 'loggedin' in session:
+        
+        if request.method == 'GET':
+            
+            idCar = request.form['id']
+            #make = request.form['make']
+            #bodyType = request.form['bodyType']
+            #colour = request.form['colour']
+            #seats = request.form['seats']
+            #location = request.form['location']
+            #cost = request.form['cost']
+            #bookedBy = request.form['bookedBy']
+            
+            #cursor.execute("INSERT INTO `cars` (`id`, `make`, `bodyType`, `colour`, `seats`, `location`, `cost`, `bookedBy`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (carId, make, body, colour, seats, location, cost, bookedBy,))
+            #cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            #'SELECT * FROM users WHERE id = %s', (session['id'],))
+            #cursor.execute('SELECT * FROM cars WHERE id = s% AND make = s% AND bodyType = s% AND colour = s% AND seats = s% AND location = s% AND cost = s% AND bookedBy = s%', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
+            cursor.execute('SELECT * FROM cars')
+            cars = cursor.fetchone()
+            #print(cars)
+            #return render_template('cars.html', cars=cars)
+            return render_template('home.html')
+        else:
+            
+            
+            idcar = request.form['idCar']
+            make = request.form['make']
+            bodyType = request.form['bodyType']
+            colour = request.form['colour']
+            seats = request.form['seats']
+            location = request.form['location']
+            cost = request.form['cost']
+            bookedBy = request.form['bookedBy']
+
+            if(idcar == "" and make == ""):
+                return redirect(url_for('cars'))
+            else:
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                #cursor.execute('SELECT * FROM cars WHERE id = s% AND make = s% AND bodyType = s% AND colour = s% AND seats = s% AND location = s% AND cost = s% AND bookedBy = s%', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
+                cursor.execute('SELECT * FROM cars WHERE id = %s OR make = %s OR bodyType = %s OR colour = %s OR seats = %s OR location = %s OR cost = %s OR bookedBy = %s', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
+                cars = cursor.fetchall()
+                # Show the profile page with account info
+                return render_template('cars.html', cars=cars)
+            
+        
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')
