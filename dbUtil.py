@@ -70,10 +70,29 @@ class DatabaseUtils:
         self.connection.commit()
 
         return cursor.rowcount == 1
+    
+    def insertCar(self, carId, make, body, colour, seats, location, cost, bookedBy):
+        with self.connection.cursor() as cursor:
+            cursor.execute("INSERT INTO `cars` (`id`, `make`, `bodyType`, `colour`, `seats`, `location`, `cost`, `bookedBy`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (carId, make, body, colour, seats, location, cost, bookedBy,))
+            #cursor.execute("insert into Person (Name) values (%s)", (name,))
+        self.connection.commit()
+
+        return cursor.rowcount == 1
+    
+    def deleteCar(self, carId):
+        with self.connection.cursor() as cursor:
+            # Note there is an intentionally placed bug here: != should be =
+            cursor.execute("delete from cars where id = %s", (carId,))
+        self.connection.commit()
 
     def getPeople(self):
         with self.connection.cursor() as cursor:
             cursor.execute("select id, username from users")
+            return cursor.fetchall()
+    
+    def getCars(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("select id, make from cars")
             return cursor.fetchall()
 
     def deletePerson(self, personID):
