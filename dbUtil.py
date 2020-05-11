@@ -36,6 +36,18 @@ class DatabaseUtils:
                 )""")
         self.connection.commit()
     
+    def createBookingsTable(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS `bookings` (
+                `userid` int(11) NOT NULL,
+                `firstName` varchar(50) NOT NULL,
+                `date` varchar(255) NOT NULL,
+                `booked` BIT(1) NOT NULL,
+                PRIMARY KEY (`userid`)
+                )""")
+        self.connection.commit()
+    
 #    def createPersonTable(self):
 #        with self.connection.cursor() as cursor:
 #            cursor.execute("""
