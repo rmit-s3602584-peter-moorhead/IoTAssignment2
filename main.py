@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, url_for, session, redirect
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
+import sys
 
 app = Flask(__name__)
 
@@ -47,6 +48,13 @@ mysql = MySQL(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    """
+        This POST function gets the username and password from a html
+        form and uses it to query the sql database.
+        If the user exists in the database it opens a session on the server.
+        If the user doesn't exist it messages the user that they incorrectly
+        input their details or they aren't registered in the database.
+    """
     # Output message if something goes wrong...
     msg = ''
     # Check if "username" and "password" POST requests exist (user submitted form)
@@ -77,18 +85,29 @@ def login():
 # http://localhost:5000/python/logout - this will be the logout page
 @app.route('/logout')
 def logout():
+    """
+    Logout function to end the session and redirects to the login page
+    """
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('id', None)
-   session.pop('username', None)
-   session.pop('typeOfUser', None)
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+    session.pop('typeOfUser', None)
    
-   # Redirect to login page
-   return redirect(url_for('login'))
+    # Redirect to login page
+    return redirect(url_for('login'))
 
 # http://localhost:5000/pythinlogin/register - this will be the registration page, we need to use both GET and POST requests
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+        This function registers a new user. It first checks if the form data
+        from the user already exists in the database via a POST request to
+        the google sql database. The data is then processed through validation
+        so that the data will be valid and can be created in the database.
+        Once the form is correctly filled with valid data it will send it off
+        to the database and a new user will be registered.
+    """
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
@@ -127,6 +146,13 @@ def register():
 # http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
 @app.route('/home')
 def home():
+    """
+        This function checks that the user is logged in to a valid user
+        and renders the individuals homepage. If its and admin user
+        it will have extra features available.
+        If its not logged in then the user will be redirected to the
+        login page.
+    """
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
@@ -139,6 +165,10 @@ def home():
 
 @app.route('/profile')
 def profile():
+    """
+        This function defines the route to the users profile page where
+        they will be able to check their booking history.
+    """
     # Check if user is loggedin
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
@@ -152,11 +182,18 @@ def profile():
 
 @app.route('/cars')
 def cars():
+    """
+        This function will render the template for the cars available to
+        hire. It also you can also search for available cars based on
+        their attributes via a POST form in carQuery.
+    """
     # Check if user is loggedin
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
+        available = ''
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM cars')
+        cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
+        #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
         cars = cursor.fetchall()
         # Show the profile page with account info
         return render_template('cars.html', cars=cars)
@@ -165,6 +202,10 @@ def cars():
 
 @app.route('/carManagement')
 def carManagement():
+    """
+        An admin function that will let admin's perform database operations
+        that regular users should not be able to.
+    """
     if 'loggedin' in session:
         # User is loggedin show them the home page
         if session['typeOfUser'] == 'Customer':
@@ -181,18 +222,6 @@ def carQuery():
         if request.method == 'GET':
             
             idCar = request.form['id']
-            #make = request.form['make']
-            #bodyType = request.form['bodyType']
-            #colour = request.form['colour']
-            #seats = request.form['seats']
-            #location = request.form['location']
-            #cost = request.form['cost']
-            #bookedBy = request.form['bookedBy']
-            
-            #cursor.execute("INSERT INTO `cars` (`id`, `make`, `bodyType`, `colour`, `seats`, `location`, `cost`, `bookedBy`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (carId, make, body, colour, seats, location, cost, bookedBy,))
-            #cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            #'SELECT * FROM users WHERE id = %s', (session['id'],))
-            #cursor.execute('SELECT * FROM cars WHERE id = s% AND make = s% AND bodyType = s% AND colour = s% AND seats = s% AND location = s% AND cost = s% AND bookedBy = s%', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
             cursor.execute('SELECT * FROM cars')
             cars = cursor.fetchone()
             #print(cars)
@@ -208,14 +237,93 @@ def carQuery():
             seats = request.form['seats']
             location = request.form['location']
             cost = request.form['cost']
+            #bookedBy = 'Cathy'
             bookedBy = request.form['bookedBy']
+            returned = 0
 
-            if(idcar == "" and make == ""):
+            sqlExpression = 'SELECT * FROM cars'
+            count = 0
+            
+            if idcar == '' and make == '' and bodyType == '' and colour == '' and seats == '' and location == '' and cost == '' and bookedBy == '':
                 return redirect(url_for('cars'))
             else:
+                sqlExpression = 'SELECT * FROM cars WHERE '
+                if idcar != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' id = ' + idcar
+                    else:
+                        sqlExpression = sqlExpression + ' id = ' + idcar
+                        count = 1
+                        app.logger.info(count)
+
+                if make != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' make = ' + '"' + make + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' make = ' + '"' + make + '"'
+                        count += 1
+                        app.logger.info(count)
+                        
+                if bodyType != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' bodyType = ' + '"' + bodyType + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' bodyType = ' + '"' + bodyType + '"'
+                        count = 1
+                        app.logger.info(count)
+                        
+                if colour != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' colour = ' + '"' + colour + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' colour = ' + '"' + colour + '"'
+                        count = 1
+                        app.logger.info(count)
+                        
+                if seats != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' seats = ' + '"' + seats + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' seats = ' + '"' + seats + '"'
+                        count = 1
+                        app.logger.info(count)
+                        
+                if location != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' location = ' + '"' + location + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' location = ' + '"' + location + '"'
+                        count = 1
+                        app.logger.info(count)
+                        
+                if cost != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' cost = ' + '"' + cost + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' cost = ' + '"' + cost + '"'
+                        count = 1
+                        app.logger.info(count)
+                        
+                if bookedBy != '':
+                    if count != 0:
+                        sqlExpression = sqlExpression + ' AND ' + ' bookedBy = ' + '"' + bookedBy + '"'
+                    else:
+                        sqlExpression = sqlExpression + ' bookedBy = ' + '"' + bookedBy + '"'
+                        count = 1
+                        app.logger.info(count)
+                        
+                app.logger.info(sqlExpression)
+                
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                 #cursor.execute('SELECT * FROM cars WHERE id = s% AND make = s% AND bodyType = s% AND colour = s% AND seats = s% AND location = s% AND cost = s% AND bookedBy = s%', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
-                cursor.execute('SELECT * FROM cars WHERE id = %s OR make = %s OR bodyType = %s OR colour = %s OR seats = %s OR location = %s OR cost = %s OR bookedBy = %s', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
+                #cursor.execute('SELECT * FROM cars WHERE id = %s OR make = %s OR bodyType = %s OR colour = %s OR seats = %s OR location = %s OR cost = %s OR bookedBy = %s OR returned = %s', (idcar, make, bodyType, colour, seats, location, cost, bookedBy, returned,))
+                
+                #cursor.execute('SELECT * FROM cars WHERE id = %s OR make = %s OR bodyType = %s OR colour = %s OR seats = %s OR location = %s OR cost = %s', (idcar, make, bodyType, colour, seats, location, cost,))
+                #cursor.execute('SELECT * FROM cars WHERE id = %s AND make = %s AND bodyType = %s AND colour = %s AND seats = %s AND location = %s AND cost = %s', (idcar, make, bodyType, colour, seats, location, cost,))
+                cursor.execute(sqlExpression)
+                #cursor.execute('SELECT * FROM cars WHERE  bodyType = "Sedan"')
+
+                #return redirect(url_for('cars'))
                 cars = cursor.fetchall()
                 # Show the profile page with account info
                 return render_template('cars.html', cars=cars)

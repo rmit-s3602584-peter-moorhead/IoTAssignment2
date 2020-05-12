@@ -3,7 +3,7 @@ from dbUtil import DatabaseUtils
 class Menu:
     def main(self):
         with DatabaseUtils() as db:
-            db.createBookingsTable()
+            db.createCarsTable()
         self.runMenu()
 
     def runMenu(self):
@@ -33,8 +33,8 @@ class Menu:
             elif(selection == "6"):
                 self.deleteCar()
             elif(selection == "7"):
-                print("Have to change dbUtil if you want to drop a table")
-                #self.dropTable()
+                #print("Have to change dbUtil if you want to drop a table")
+                self.dropTable()
             elif(selection == "8"):
                 print("Goodbye!")
                 break
