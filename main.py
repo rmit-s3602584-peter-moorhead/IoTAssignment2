@@ -26,34 +26,23 @@ app.secret_key = 'your secret key'
 #                   PRIMARY KEY (`id`)
 #                   )""")
 
-# Enter your database connection details below
 app.config['MYSQL_HOST'] = '35.244.72.137'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '1234'
 app.config['MYSQL_DB'] = 'Peopl'
 
-#HOST = "35.244.72.137"
-#    USER = "root"
-#    PASSWORD = "1234"
-#    DATABASE = "Peopl"
 
-# Intialize MySQL
 mysql = MySQL(app)
 
-
-
-#@app.route('/')
-#def index():
-#    return 'Hello world'
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
     """
-        This POST function gets the username and password from a html
-        form and uses it to query the sql database.
-        If the user exists in the database it opens a session on the server.
-        If the user doesn't exist it messages the user that they incorrectly
-        input their details or they aren't registered in the database.
+    This POST function gets the username and password from a html
+    form and uses it to query the sql database.
+    If the user exists in the database it opens a session on the server.
+    If the user doesn't exist it messages the user that they incorrectly
+    input their details or they aren't registered in the database.
     """
     # Output message if something goes wrong...
     msg = ''
@@ -101,12 +90,12 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
-        This function registers a new user. It first checks if the form data
-        from the user already exists in the database via a POST request to
-        the google sql database. The data is then processed through validation
-        so that the data will be valid and can be created in the database.
-        Once the form is correctly filled with valid data it will send it off
-        to the database and a new user will be registered.
+    This function registers a new user. It first checks if the form data
+    from the user already exists in the database via a POST request to
+    the google sql database. The data is then processed through validation
+    so that the data will be valid and can be created in the database.
+    Once the form is correctly filled with valid data it will send it off
+    to the database and a new user will be registered.
     """
     # Output message if something goes wrong...
     msg = ''
@@ -147,11 +136,11 @@ def register():
 @app.route('/home')
 def home():
     """
-        This function checks that the user is logged in to a valid user
-        and renders the individuals homepage. If its and admin user
-        it will have extra features available.
-        If its not logged in then the user will be redirected to the
-        login page.
+    This function checks that the user is logged in to a valid user
+    and renders the individuals homepage. If its and admin user
+    it will have extra features available.
+    If its not logged in then the user will be redirected to the
+    login page.
     """
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -166,8 +155,8 @@ def home():
 @app.route('/profile')
 def profile():
     """
-        This function defines the route to the users profile page where
-        they will be able to check their booking history.
+    This function defines the route to the users profile page where
+    they will be able to check their booking history.
     """
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -183,16 +172,17 @@ def profile():
 @app.route('/cars')
 def cars():
     """
-        This function will render the template for the cars available to
-        hire. It also you can also search for available cars based on
-        their attributes via a POST form in carQuery.
+    This function will render the template for the cars available to
+    hire. It also you can also search for available cars based on
+    their attributes via a POST form in carQuery.
     """
     # Check if user is loggedin
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
-        available = ''
+        #available = ''
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
+        cursor.execute('SELECT * FROM cars')
+        #cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
         #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
         cars = cursor.fetchall()
         # Show the profile page with account info
@@ -203,8 +193,8 @@ def cars():
 @app.route('/carManagement')
 def carManagement():
     """
-        An admin function that will let admin's perform database operations
-        that regular users should not be able to.
+    An admin function that will let admin's perform database operations
+    that regular users should not be able to.
     """
     if 'loggedin' in session:
         # User is loggedin show them the home page
@@ -217,6 +207,15 @@ def carManagement():
 
 @app.route('/carQuery', methods=['GET', 'POST'])
 def carQuery():
+    
+    """
+    This function takes the data from a form and builds an sql query based
+    on what variation of attribute user was looking for.
+    If the form is blank it returns all the cars available like the cars route.
+    It is probably susceptible to an SQL injection at the moment but will
+    hopefully in the future provide a more robust input validation scheme.
+    """
+    
     if 'loggedin' in session:
         
         if request.method == 'GET':
@@ -330,6 +329,40 @@ def carQuery():
             
         
     return redirect(url_for('login'))
+
+
+@app.route('/carBooking', methods=['GET', 'POST'])
+def carBooking():
+    
+    """
+    User will book a car by posting to the booking and car tables
+    """
+    if 'loggedin' in session:
+        if request.method == 'POST':
+            username = session['username']
+            bookingCarId = request.form['bookingCarId']
+            
+            sqlExpression = 'UPDATE cars SET bookedBy = ' + '"' + username + '"' + ' WHERE id = ' + bookingCarId
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            #cursor.execute(sqlExpression)
+            #cursor.execute('UPDATE cars SET bookedBy = "Test" WHERE id = 4')
+            cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
+            #UPDATE cars SET bookedBy = "Test" WHERE id = 1
+            
+            app.logger.info(sqlExpression)
+            
+            return render_template('cars.html')
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login'))
+        
+    
+    
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')
