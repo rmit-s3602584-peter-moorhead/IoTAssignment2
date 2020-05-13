@@ -39,32 +39,38 @@ def main():
                 print("Enter Credentials")
                 username = input("Username: ")
                 s.sendall(username.encode())
-                password = input ("Password: ")
+                password = input("Password: ")
                 s.sendall(password.encode())
+                carID = input("Car ID:")
+                s.sendall(carID.encode())
                 #device_name = input("Enter the name of your phone: ")
                 device_name = "Galaxy S9"
                 print("test 4")
                 reply = s.recv(4096)
                 print("test 3")
                 rep = reply.decode()
-                
+                print(rep)
                 if rep == "true":
                     print("Welcome {}".format(username))
                     print("1. Unlock Car")
                     print("2. Return Car")
                     choice = input("Enter choice: ")
                     if choice == "1":                                     
-                        search(username, device_name)
-                        ip_address = os.popen('hostname -I').read()
-                        send_notification_via_pushbullet(ip_address, "Car Unlocked")
+                        #search(username, device_name)
+                        #ip_address = os.popen('hostname -I').read()
+                        #send_notification_via_pushbullet(ip_address, "Car Unlocked")
+                        unl = "0"
+                        s.sendall(unl.encode())
                         print("Car Unlocked")
                         location = getLoc()
                         s.sendall(location.encode())
                         break
                     elif choice == "2":
-                        search(username, device_name)
-                        ip_address = os.popen('hostname -I').read()
-                        send_notification_via_pushbullet(ip_address, "Car Returned")
+                        #search(username, device_name)
+                        #ip_address = os.popen('hostname -I').read()
+                        #send_notification_via_pushbullet(ip_address, "Car Returned")
+                        ret = "1"
+                        s.sendall(ret.encode())
                         print("Car Returned")
                         location = getLoc()
                         s.sendall(location.encode())                        

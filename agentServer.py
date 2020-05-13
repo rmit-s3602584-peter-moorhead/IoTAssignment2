@@ -40,6 +40,7 @@ def main():
                 
                 print(data.decode())
                 reply = data.decode()
+                print(reply)
                 if reply == "1":
                     username = conn.recv(4096)
                     us = username.decode()
@@ -48,6 +49,8 @@ def main():
                     password = conn.recv(4096)
                     pa = password.decode()
                     print("password is: {}".format(pa))
+                    carIdent = conn.recv(4096)
+                    carID = carIdent.decode()
                     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                     cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (us, pa,))
             
@@ -55,18 +58,27 @@ def main():
             
                     if account:
                         msg = "true"
-                        #s.sendall = (msg.encode())
                         print("test 1")
                     else:
                         msg = "false"
-                        #s.sendall = (msg.encode())
                         print("test 2")
                         break
-                    
                     conn.sendall(msg.encode())
+                    
+                    carStatus = conn.recv(4096)
+                    carState = carStatus.decode()
+                    if carState == "0":
+                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
+                        #tbl = cursor.execute("SELECT * from cars")
+                        #print(cursor.fetchall())
+                        #print("state changed to 0")
+                    elif carState == "1":
+                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
+                        #tbl = cursor.execute("SELECT * from cars")
+                        #print(cursor.fetchall())
+                        #print("changed to 1")
                     loc = conn.recv(4096)
                     print(loc.decode())
-                    carID = "1"
                     cursor.execute('UPDATE cars SET Location=%s WHERE id=%s', (loc, carID))
                     input("I Exist To Stop Server From Crashing")
                     
@@ -77,6 +89,7 @@ def main():
             print("Disconnecting from client.")
         print("Closing listening socket.")
     print("Done.")
+    main()
 
 
 
