@@ -1,3 +1,3 @@
 # IoTAssignment2
 
-need to pip3 install flask-mysql
+run python3 main.py
