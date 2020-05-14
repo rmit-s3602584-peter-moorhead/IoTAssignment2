@@ -69,20 +69,38 @@ def main():
                     carState = carStatus.decode()
                     if carState == "0":
                         cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
-                        #tbl = cursor.execute("SELECT * from cars")
-                        #print(cursor.fetchall())
+                        tbl = cursor.execute("SELECT * from cars")
+                        print(cursor.fetchall())
                         #print("state changed to 0")
                     elif carState == "1":
                         cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
-                        #tbl = cursor.execute("SELECT * from cars")
-                        #print(cursor.fetchall())
+                        tbl = cursor.execute("SELECT * from cars")
+                        print(cursor.fetchall())
                         #print("changed to 1")
                     loc = conn.recv(4096)
                     print(loc.decode())
                     cursor.execute('UPDATE cars SET Location=%s WHERE id=%s', (loc, carID))
                     input("I Exist To Stop Server From Crashing")
-                    
-                        
+                if reply == "2":
+                    carIdent = conn.recv(4096)
+                    carID = carIdent.decode()
+                    print(carID)
+                    cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+                    carStatus = conn.recv(4096)
+                    carState = carStatus.decode()
+                    if carState == "0":
+                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
+                        #tbl = cursor.execute("SELECT * from cars")
+                        #print(cursor.fetchall())
+                        #print("state changed to 0")
+                    elif carState == "1":
+                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
+
+                    loc = conn.recv(4096)
+                    print(loc.decode())
+                    tbl = cursor.execute("SELECT * from cars")
+                    print(cursor.fetchall())
+                    input("I Exist To Stop Server From Crashing") 
                 
                 
             
