@@ -51,6 +51,7 @@ def main():
                     print("password is: {}".format(pa))
                     carIdent = conn.recv(4096)
                     carID = carIdent.decode()
+                    print("Car ID is: {}".format(carID))
                     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                     cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (us, pa,))
             
@@ -58,11 +59,10 @@ def main():
             
                     if account:
                         msg = "true"
-                        print("test 1")
                     else:
                         msg = "false"
-                        print("test 2")
                         break
+                    print("{} has logged in".format(us))
                     conn.sendall(msg.encode())
                     
                     carStatus = conn.recv(4096)
@@ -70,21 +70,25 @@ def main():
                     if carState == "0":
                         cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
                         tbl = cursor.execute("SELECT * from cars")
-                        print(cursor.fetchall())
+                        #print(cursor.fetchall())
                         #print("state changed to 0")
                     elif carState == "1":
                         cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
                         tbl = cursor.execute("SELECT * from cars")
-                        print(cursor.fetchall())
+                        #print(cursor.fetchall())
                         #print("changed to 1")
-                    loc = conn.recv(4096)
-                    print(loc.decode())
+                    location = conn.recv(4096)
+                    loc = (location.decode())
+                    print(loc)
                     cursor.execute('UPDATE cars SET Location=%s WHERE id=%s', (loc, carID))
-                    input("I Exist To Stop Server From Crashing")
-                if reply == "2":
+                    
+                elif reply == "2":
+                    user = conn.recv(4096)
+                    us = user.decode()
+                    print("{} has logged in".format(us))
                     carIdent = conn.recv(4096)
                     carID = carIdent.decode()
-                    print(carID)
+                    print("Car ID is: {}".format(carID))
                     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                     carStatus = conn.recv(4096)
                     carState = carStatus.decode()
@@ -92,22 +96,23 @@ def main():
                         cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
                         #tbl = cursor.execute("SELECT * from cars")
                         #print(cursor.fetchall())
-                        #print("state changed to 0")
                     elif carState == "1":
                         cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
 
-                    loc = conn.recv(4096)
-                    print(loc.decode())
+                    location = conn.recv(4096)
+                    loc = (location.decode())
+                    print(loc)
+                    cursor.execute('UPDATE cars SET Location=%s WHERE id=%s', (loc, carID))
                     tbl = cursor.execute("SELECT * from cars")
-                    print(cursor.fetchall())
-                    input("I Exist To Stop Server From Crashing") 
-                
-                
-            
-            print("Disconnecting from client.")
+                time = conn.recv(4096)
+                print(time.decode())
+                break
+            msg = "You Have Been Logged Out"
+            conn.sendall(msg.encode())
+            print("User has disconnected")
         print("Closing listening socket.")
     print("Done.")
-    main()
+    
 
 
 
