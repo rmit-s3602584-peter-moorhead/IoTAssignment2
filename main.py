@@ -148,6 +148,16 @@ def home():
     if 'loggedin' in session:
         # User is loggedin show them the home page
         if session['typeOfUser'] == 'Customer':
+            if request.method == 'GET':
+                userid = session['id']
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
+                history = cursor.fetchall()
+                
+                return render_template('home.html', history=history)
+            else:
+                return render_template('cars.html')
+            
             return render_template('home.html', username=session['username'])
         else:
             return render_template('adminHome.html', username=session['username'])
@@ -373,7 +383,6 @@ def cancelBooking():
             firstName = session['firstName']
             
             cancelCarId = request.form['cancelCarId']
-            bookingCarDays = request.form['bookingCarDays']
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, cancelCarId,))
@@ -384,7 +393,7 @@ def cancelBooking():
         return redirect(url_for('login'))
       
 @app.route('/userhistory', methods=['POST'])
-def userHistory():
+def userhistory():
     
     """
     User will display history of bookings
@@ -393,7 +402,7 @@ def userHistory():
         if request.method == 'POST':
             id = session['id']
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM bookings WHERE id = %d', (id,))
+            cursor.execute('SELECT * FROM bookings WHERE userid = %d', (id,))
             history = cursor.fetchall()
             
             return render_template('userhistory.html', history=history)
