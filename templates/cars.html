@@ -74,10 +74,31 @@
 {% endfor %}
 </table>
 
-<p><img src= "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=13&size=600x300&maptype=roadmap
-&markers=color:red%7Clabel:C%7C-37.808887, 144.963231|-37.809294, 144.966482&markers=color:green%7Clabel:G%7C40.711614,-74.012318
-&markers=color:red%7Clabel:C%7C40.718217,-73.998284
-&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY"></p>
+<p>
+<img src= "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=13&size=600x300&maptype=roadmap
+&markers=color:red%7Clabel:C%7C-37.808887,144.963231&markers=color:green%7Clabel:G%7C40.711614,-74.012318
+&markers=color:blue%7Clabel:C%7C-37.809294, 144.966482
+&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY">
+</p>
+
+{# don't know if this will work #}
+{% set my_string = "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C" %}
+{% for row in cars %}
+{% set my_string = my_string + row.location + '|'%}
+{% endfor%}
+{% set my_string = my_string + "&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY" %}
+<p>
+<img src= {{my_string}}>
+</p>
+
+<!--
+{# this is a test #}
+{% set test_url = "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C-37.808887,144.963231&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY" %}
+
+<p>
+<img src={{test_url}} >
+</p>
+-->
 
 <h2>Book a car by Id<h2>
 
@@ -91,3 +112,9 @@
 </form-->
 
 {% endblock %}
+
+
+
+
+
+
