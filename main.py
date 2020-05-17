@@ -359,7 +359,25 @@ def carBooking():
     else:
         return redirect(url_for('login'))
         
+@app.route('/userhistory', methods=['POST'])
+def userHistory():
     
+    """
+    User will display history of bookings
+    """
+    if 'loggedin' in session:
+        if request.method == 'POST':
+            id = session['id']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM bookings WHERE id = %d', (id,))
+            history = cursor.fetchall()
+            
+            return render_template('userhistory.html', history=history)
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login'))
     
     
     
