@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Reference: https://realpython.com/python-sockets/
 # Documentation: https://docs.python.org/3/library/socket.html
 
@@ -21,17 +20,18 @@ import cv2
 
 #HOST = input("Enter IP address of server: ")
 def main():
+    #Intialize time variable
     now = datetime.datetime.now()
-
+    
     HOST = "192.168.0.192" # The server's hostname or IP address.
     PORT = 65000         # The port used by the server.
     ADDRESS = (HOST, PORT)
-
+    #Opens socket for connection
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         print("Connecting to {}...".format(ADDRESS))
         s.connect(ADDRESS)
         print("Connected.") 
-
+        #print menu
         while True:
             time = (now.strftime("%Y-%m-%d %H:%M:%S"))
             print("Welcome to Car Hire")
@@ -39,6 +39,7 @@ def main():
             print("1. Log In With Credentials")
             print("2. Log In With FaceID")
             sel = input("Enter Number: ")
+            #Credentials Section
             if sel == "1":
                 dec = "1"
                 s.sendall(dec.encode())
@@ -82,7 +83,7 @@ def main():
                     print("ERROR")
                     break
                 
-            
+            #FaceID section 
             elif sel == "2":
                 dec = "2"
                 s.sendall(dec.encode())
@@ -105,7 +106,10 @@ def main():
                     s.sendall(ret.encode())
                     print("Car Returned")
                     location = getLoc()
-                    s.sendall(location.encode())                        
+                    s.sendall(location.encode())  
+                else:
+                    print("Invalid Input")
+                    break
                 s.sendall(time.encode())    
                 break
                     
@@ -121,7 +125,7 @@ def main():
     
 
 
-
+#Gets current location of AgentPi
 def getLoc():
     r = requests.get('http://ipinfo.io/loc')   
     re = r.text
@@ -130,14 +134,11 @@ def getLoc():
         
   
 
-## Reference
-## https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
-
-# import the necessary packages
-
-
+#Reference
+#https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
+#Facial Recognition Function
 def faceID():
-    # construct the argument parser and parse the arguments
+    # Argument Parser
     ap = argparse.ArgumentParser()
     ap.add_argument("-e", "--encodings", default="encodings.pickle",
     help="path to serialized db of facial encodings")
@@ -147,80 +148,59 @@ def faceID():
         help="face detection model to use: either `hog` or `cnn`")
     args = vars(ap.parse_args())
 
-    # load the known faces and embeddings
+    # Load taken photos encodings
     print("[INFO] loading encodings...")
     data = pickle.loads(open(args["encodings"], "rb").read())
 
-    # initialize the video stream and then allow the camera sensor to warm up
+    # Initialize and Turn on Web Cam
     print("[INFO] starting video stream...")
     vs = VideoStream(src = 0).start()
     time.sleep(2.0)
 
-    # loop over frames from the video file stream
+    # Loop over video frames
     while True:
-        # grab the frame from the threaded video stream
+        # Grab frame from video stream
         frame = vs.read()
 
-        # convert the input frame from BGR to RGB then resize it to have
-        # a width of 750px (to speedup processing)
+        # Convert from BGR to RGB and resize
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         rgb = imutils.resize(frame, width = args["resolution"])
 
-        # detect the (x, y)-coordinates of the bounding boxes
-        # corresponding to each face in the input frame, then compute
-        # the facial embeddings for each face
+        # Detect the (x, y)-coordinates then compute facial embeddings
         boxes = face_recognition.face_locations(rgb, model = args["detection_method"])
         encodings = face_recognition.face_encodings(rgb, boxes)
         names = []
 
-        # loop over the facial embeddings
+        # Loop facial embeddings
         for encoding in encodings:
-            # attempt to match each face in the input image to our known
-            # encodings
+            # Try to match face with encodings
             matches = face_recognition.compare_faces(data["encodings"], encoding)
             name = "Unknown"
 
-            # check to see if we have found a match
+            # Check for matches
             if True in matches:
-                # find the indexes of all matched faces then initialize a
-                # dictionary to count the total number of times each face
-                # was matched
+                # Count number of face matches
                 matchedIdxs = [i for (i, b) in enumerate(matches) if b]
                 counts = {}
-
-                # loop over the matched indexes and maintain a count for
-                # each recognized face face
                 for i in matchedIdxs:
                     name = data["names"][i]
                     counts[name] = counts.get(name, 0) + 1
                     break
 
-                # determine the recognized face with the largest number
-                # of votes (note: in the event of an unlikely tie Python
-                # will select first entry in the dictionary)
+                # Determine most likely recognized faced based on number of votes
                 name = max(counts, key = counts.get)
                 
 
-            # update the list of names
+            # Update matched face to names
             names.append(name)
-       # loop over the recognized faces
+       # Print all matches
         for name in names:
-            # print to console, identified person
+            # return name of Matched user
             print("Person found: {}".format(name))
-            # Set a flag to sleep the cam for fixed time
             return name
             
         break
-    # do a bit of cleanup
+    # Stop Video Stream
     vs.stop()
     
-    
-  
-  
-  
-  
-  
-  
-  
-  
 main()
