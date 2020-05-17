@@ -1,6 +1,7 @@
 #main file
 from flask import Flask, render_template, request, url_for, session, redirect
 from flask_mysqldb import MySQL
+from datetime import datetime
 import MySQLdb.cursors
 import re
 import sys
@@ -63,6 +64,7 @@ def login():
             session['id'] = account['id']
             session['username'] = account['username']
             session['typeOfUser'] = account['typeOfUser']
+            session['firstName'] = account['firstName']
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -339,26 +341,48 @@ def carBooking():
     """
     if 'loggedin' in session:
         if request.method == 'POST':
+            userid = session['id']
             username = session['username']
-            bookingCarId = request.form['bookingCarId']
+            firstName = session['firstName']
+            date = datetime.now()
             
-            sqlExpression = 'UPDATE cars SET bookedBy = ' + '"' + username + '"' + ' WHERE id = ' + bookingCarId
+            bookingCarId = request.form['bookingCarId']
+            bookingCarDays = request.form['bookingCarDays']
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            #cursor.execute(sqlExpression)
-            #cursor.execute('UPDATE cars SET bookedBy = "Test" WHERE id = 4')
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
-            #UPDATE cars SET bookedBy = "Test" WHERE id = 1
+            #cursor.execute('INSERT INTO `bookings`  
+            cursor.execute('INSERT INTO `bookings` (`userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s)', (userid, firstName, date, bookingCarDays,))
             
-            app.logger.info(sqlExpression)
-            
+            mysql.connection.commit()
             return render_template('cars.html')
         else:
             return render_template('profile.html')
         
     else:
         return redirect(url_for('login'))
+
+
+@app.route('/cancelBooking', methods=['GET', 'POST'])
+def cancelBooking():
+
+    if 'loggedin' in session:
+        if request.method == 'POST':
+            userid = session['id']
+            username = ""
+            firstName = session['firstName']
+            
+            cancelCarId = request.form['cancelCarId']
+            bookingCarDays = request.form['bookingCarDays']
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, cancelCarId,))
+        else:
+            return render_template('profile.html')
         
+    else:
+        return redirect(url_for('login'))
+      
 @app.route('/userhistory', methods=['POST'])
 def userHistory():
     
@@ -374,13 +398,9 @@ def userHistory():
             
             return render_template('userhistory.html', history=history)
         else:
-            return render_template('profile.html')
-        
+            return render_template('cars.html')
     else:
         return redirect(url_for('login'))
-    
-    
-    
-
+ 
 if __name__ == '__main__':
     app.run(debug=True, port=80, host='0.0.0.0')
