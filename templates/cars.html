@@ -7,41 +7,14 @@
 <p>This is where you can search and book cars.</p>
 
 <form action="{{ url_for('carQuery') }}" method="post" autocomplete="off">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="idCar" placeholder="Seach by id" id="idCar">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="make" placeholder="Seach by make" id="make">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="bodyType" placeholder="Seach by body type" id="bodyType">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="colour" placeholder="Seach by colour" id="colour">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="seats" placeholder="Seach by number of seats" id="seats">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="location" placeholder="Seach by location" id="location">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="cost" placeholder="Seach by cost per hour" id="cost">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<input type="text" name="bookedBy" placeholder="Seach by user booked" id="bookedBy">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
 	<div class="msg">{{ msg }}</div>
 	<input type="submit" value="Search">
 </form>
@@ -102,14 +75,13 @@
 
 <h2>Book a car by Id<h2>
 
-<!--form action="{{ url_for('carQuery') }}" method="post" autocomplete="off">
-	<label for="username">
-		<i class="fas fa-user"></i>
-	</label>
-	<input type="text" name="idCar" placeholder="Seach by id" id="idCar">
+<form action="{{ url_for('carBooking') }}" method="post" autocomplete="off">
+	
+	<input type="text" name="bookingCarId" placeholder="Search by car id" id="bookingCarId">
+	<input type="text" name="bookingCarDays" placeholder="Amount of days" id="bookingCarDays">
 	<div class="msg">{{ msg }}</div>
 	<input type="submit" value="Search">
-</form-->
+</form>
 
 {% endblock %}
 
