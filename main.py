@@ -139,6 +139,7 @@ def register():
             cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
+            return redirect(url_for('login'))
     elif request.method == 'POST':
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
@@ -165,7 +166,7 @@ def home():
                 cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
                 history = cursor.fetchall()
                 
-                return render_template('home.html', history=history)
+                return render_template('home.html', history=history, username=session['username'])
             else:
                 return render_template('cars.html')
             
@@ -358,7 +359,15 @@ def carQuery():
                 #return redirect(url_for('cars'))
                 cars = cursor.fetchall()
                 # Show the profile page with account info
-                return render_template('cars.html', cars=cars)
+                my_string = ""
+                cout = 0 
+                for row in cars:
+                    my_string = my_string + row['longlat'] + '|'
+
+                print(my_string)
+                # Show the profile page with account info
+                return render_template('cars.html', cars=cars, my_string=my_string)
+                            
             
         
     return redirect(url_for('login'))
