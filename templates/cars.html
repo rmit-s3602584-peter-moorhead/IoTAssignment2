@@ -49,6 +49,14 @@
 {% endfor %}
 </table>
 
+<!--Google maps API -->
+{% set url_string = "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=10&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C" + my_string + "&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY" %}
+
+<p>
+<img src= {{url_string}}>
+</p>
+
+
 <h2>Book a car by Id<h2>
 
 <form action="{{ url_for('carBooking') }}" method="post" autocomplete="off">
@@ -60,3 +68,9 @@
 </form>
 
 {% endblock %}
+
+
+
+
+
+
