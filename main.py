@@ -195,10 +195,20 @@ def cars():
         cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
         #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
         cars = cursor.fetchall()
+
+        my_string = ""
+        cout = 0 
+        for row in cars:
+            my_string = my_string + row['longlat'] + '|'
+
+        print(my_string)
         # Show the profile page with account info
-        return render_template('cars.html', cars=cars)
+        return render_template('cars.html', cars=cars, my_string=my_string)
+    
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+    
 
 @app.route('/carManagement')
 def carManagement():
