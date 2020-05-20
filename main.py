@@ -5,6 +5,8 @@ from datetime import datetime
 import MySQLdb.cursors
 import re
 import sys
+from datetime import datetime, timedelta
+from cal_setup import get_calendar_service
 
 app = Flask(__name__)
 
@@ -358,13 +360,43 @@ def carBooking():
             
             bookingCarId = request.form['bookingCarId']
             bookingCarDays = request.form['bookingCarDays']
+
+            service = get_calendar_service()
+
+            d = datetime.now().date()
+            #change this for the amount of 
+            numDayBook = 1
+            endBook = datetime(d.year, d.month, d.day, 10)+timedelta(days=1)
+            start = endBook.isoformat()
+            end = (endBook + timedelta(hours=1)).isoformat()
+
+            event_result = service.events().insert(calendarId='primary',
+                body={ 
+                    "summary": 'Car booking', 
+                    "description": 'This is the calendar event created for your car booking',
+                    "start": {"dateTime": start, "timeZone": 'Australia/Sydney'}, 
+                    "end": {"dateTime": end, "timeZone": 'Australia/Sydney'},
+                }
+            ).execute()
+
+            eventId = event_result['id']
+            
+            print("created event")
+            print("id: ", event_result['id'])
+            print("summary: ", event_result['summary'])
+            print("starts at: ", event_result['start']['dateTime'])
+            print("ends at: ", event_result['end']['dateTime'])
+
+
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
             #cursor.execute('INSERT INTO `bookings`  
-            cursor.execute('INSERT INTO `bookings` (`userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s)', (userid, firstName, date, bookingCarDays,))
+            cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays,))
             
             mysql.connection.commit()
+
+            
             return render_template('cars.html')
         else:
             return render_template('profile.html')
@@ -381,11 +413,35 @@ def cancelBooking():
             userid = session['id']
             username = ""
             firstName = session['firstName']
-            
+
             cancelCarId = request.form['cancelCarId']
+
+    
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelCarId,))
+            cars = cursor.fetchone()
+               
+            
+
+            app.logger.info(cars['calendarId'])
+            service = get_calendar_service()
+            try:
+               service.events().delete(
+                    calendarId='primary',
+                    eventId=cars['calendarId'],
+                ).execute()
+            except googleapiclient.errors.HttpError:
+               print("Failed to delete event")
+            
+            print("Event deleted")
+
+
+
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, cancelCarId,))
+            return render_template('home.html')
         else:
             return render_template('profile.html')
         

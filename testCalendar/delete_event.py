@@ -6,7 +6,7 @@ def main():
     try:
         service.events().delete(
             calendarId='primary',
-            eventId='udtt4jv8sljlkm4o3dc9sjfdak',
+            eventId='t3e8p7kum9hvlfuesr2ssd1qa4',
         ).execute()
     except googleapiclient.errors.HttpError:
         print("Failed to delete event")

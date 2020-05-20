@@ -3,14 +3,13 @@ from cal_setup import get_calendar_service
 
 
 def main():
-    # creates one hour event tomorrow 10 AM IST
     service = get_calendar_service()
 
     d = datetime.now().date()
     #change this for the amount of 
     numDayBook = 1
     endBook = datetime(d.year, d.month, d.day, 10)+timedelta(days=1)
-    start = d.isoformat()
+    start = endBook.isoformat()
     end = (endBook + timedelta(hours=1)).isoformat()
 
     event_result = service.events().insert(calendarId='primary',
