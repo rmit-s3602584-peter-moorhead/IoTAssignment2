@@ -5,6 +5,7 @@ from datetime import datetime
 import MySQLdb.cursors
 import re
 import sys
+import hashlib
 
 app = Flask(__name__)
 
@@ -52,9 +53,14 @@ def login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
+        # generates a Salt and Hashes the Password with sha256
+        salt = "lcyysk2NAQOJCHxkM1fA"
+        saltPass = password+salt
+        hashPass = hashlib.sha256(saltPass.encode())
+        encryptPass = hashPass.hexdigest()
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, encryptPass,))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists in accounts table in out database
@@ -110,6 +116,11 @@ def register():
         lastName = request.form['lastName']
         email = request.form['email']
         customer = "Customer"
+        # Generates a Salt and Hashes the Password with sha256
+        salt = "lcyysk2NAQOJCHxkM1fA"
+        saltPass = password+salt
+        hashPass = hashlib.sha256(saltPass.encode())
+        encryptPass = hashPass.hexdigest()
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
@@ -125,7 +136,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s)', (username, password, firstName, lastName, email, customer,))
+            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
