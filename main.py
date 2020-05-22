@@ -1,11 +1,15 @@
 #main file
 from flask import Flask, render_template, request, url_for, session, redirect
 from flask_mysqldb import MySQL
-from datetime import datetime
 import MySQLdb.cursors
 import re
 import sys
+
+from datetime import datetime, timedelta
+from cal_setup import get_calendar_service
+
 import hashlib
+
 
 app = Flask(__name__)
 
@@ -166,6 +170,7 @@ def home():
                 cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
                 history = cursor.fetchall()
                 
+
                 return render_template('home.html', history=history, username=session['username'])
             else:
                 return render_template('cars.html')
@@ -388,13 +393,51 @@ def carBooking():
             
             bookingCarId = request.form['bookingCarId']
             bookingCarDays = request.form['bookingCarDays']
+
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE id = %s', (bookingCarId,))               
+            cars = cursor.fetchone()
+            
+            service = get_calendar_service()
+            
+            
+            d = datetime.now().date()
+            #change this for the amount of 
+            numDayBook = 1
+            startBook = datetime(d.year, d.month, d.day, 10)
+            endBook = datetime(d.year, d.month, d.day, 10)+timedelta(days=int(bookingCarDays))
+            start = startBook.isoformat()
+            end = endBook.isoformat()
+
+            event_result = service.events().insert(calendarId='primary',
+                body={ 
+                    "summary": firstName, 
+                    "description": cars['make'],
+                    "start": {"dateTime": start, "timeZone": 'Australia/Sydney'}, 
+                    "end": {"dateTime": end, "timeZone": 'Australia/Sydney'},
+                }
+            ).execute()
+
+            eventId = event_result['id']
+            
+            print("created event")
+            print("id: ", event_result['id'])
+            print("summary: ", event_result['summary'])
+            print("starts at: ", event_result['start']['dateTime'])
+            print("ends at: ", event_result['end']['dateTime'])
+
+
+
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
             #cursor.execute('INSERT INTO `bookings`  
-            cursor.execute('INSERT INTO `bookings` (`userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s)', (userid, firstName, date, bookingCarDays,))
+
+            cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays,))
             
             mysql.connection.commit()
+
             return render_template('cars.html')
         else:
             return render_template('profile.html')
@@ -411,11 +454,39 @@ def cancelBooking():
             userid = session['id']
             username = ""
             firstName = session['firstName']
-            
+
             cancelCarId = request.form['cancelCarId']
+
+    
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelCarId,))
+            cars = cursor.fetchone()
+            mysql.connection.commit()
+               
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, cancelCarId,))
+            mysql.connection.commit()
+
+            #app.logger.info(cars['calendarId'])
+
+            service = get_calendar_service()
+            try:
+               service.events().delete(
+                    calendarId='primary',
+                    eventId=cars['calendarId'],
+                ).execute()
+            except:
+               print("Failed to delete event")
+            
+            print("Event deleted")
+
+
+
+            
+            
+            return render_template('home.html')
+
         else:
             return render_template('profile.html')
         

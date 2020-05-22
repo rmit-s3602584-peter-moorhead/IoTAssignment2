@@ -3,7 +3,7 @@ from dbUtil import DatabaseUtils
 class Menu:
     def main(self):
         with DatabaseUtils() as db:
-            db.createCarsTable()
+            db.createBookingsTable()
         self.runMenu()
 
     def runMenu(self):

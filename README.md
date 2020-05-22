@@ -1,5 +1,8 @@
 # IoTAssignment2
 
+
+run python3 main.py
+
 Installation:
 
 clone repo
@@ -11,4 +14,5 @@ pip3 install flask-mysqldb
 export FLASK_APP=IoTAssignment2
 pip install -e .
 flask run
+
 
