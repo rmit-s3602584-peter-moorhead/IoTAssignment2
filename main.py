@@ -436,9 +436,22 @@ def carBooking():
 
             cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays,))
             
-            mysql.connection.commit()
+            
 
-            return render_template('cars.html')
+
+            #my_string = ""
+
+            #for row in cars:
+            #    my_string = my_string + row['longlat'] + '|'
+#
+            #print(my_string)
+
+            #mysql.connection.commit()
+            # Show the profile page with account info
+            #return render_template('cars.html', cars=cars, my_string=my_string)
+
+            return redirect(url_for('cars'))
+            #return render_template('cars.html')
         else:
             return render_template('profile.html')
         
