@@ -3,6 +3,7 @@
 
 import socket
 import MySQLdb.cursors
+import hashlib
 def main():
     
     #Database connection

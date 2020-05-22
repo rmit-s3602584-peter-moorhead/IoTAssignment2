@@ -15,7 +15,7 @@ import argparse
 import imutils
 import pickle
 import cv2
-
+import hashlib
 
 
 #HOST = input("Enter IP address of server: ")
@@ -47,7 +47,11 @@ def main():
                 username = input("Username: ")
                 s.sendall(username.encode())
                 password = input("Password: ")
-                s.sendall(password.encode())
+                salt = "lcyysk2NAQOJCHxkM1fA"
+                saltPass = password+salt
+                hashPass = hashlib.sha256(saltPass.encode())
+                enPa = hashPass.hexdigest()
+                s.sendall(enPa.encode())
                 carID = input("Car ID:")
                 s.sendall(carID.encode())
                 device_name = "Galaxy S9"
