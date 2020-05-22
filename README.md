@@ -11,3 +11,4 @@ pip3 install flask-mysqldb
 export FLASK_APP=IoTAssignment2
 pip install -e .
 flask run
+
