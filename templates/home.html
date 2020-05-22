@@ -12,7 +12,9 @@
 	<TH>Id</TH>
 	<TH>First Name</TH>
     <TH>Date</TH>
-    <TH>Booked</TH>
+    <TH>Days Booked</TH>
+    <TH>Car Id</TH>
+    <TH>Status</TH>
 </TR>
 
 {% for row in history %}
@@ -20,7 +22,9 @@
 	<TD>{{row.userid}}</TD>
 	<TD>{{row.firstName}}</TD>
     <TD>{{row.date}}</TD>
-    <TD>{{row.booked}}</TD>
+    <TD>{{row.daysBooked}}</TD>
+    <TD>{{row.carId}}</TD>
+    <TD>{{row.current}}</TD>
 </TR>
 {% endfor %}
 </table>
@@ -31,7 +35,7 @@
 	
 	<input type="text" name="cancelCarId" placeholder="Cancel by car id" id="cancelCarId">
 	<div class="msg">{{ msg }}</div>
-	<input type="submit" value="Cancel">
+	<input type="submit" value="Submit Cancellation">
 </form>
 
 

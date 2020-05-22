@@ -163,7 +163,7 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        if session['typeOfUser'] == 'Customer':
+        #if session['typeOfUser'] == 'Customer':
             if request.method == 'GET':
                 userid = session['id']
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -176,8 +176,8 @@ def home():
                 return render_template('cars.html')
             
             return render_template('home.html', username=session['username'])
-        else:
-            return render_template('adminHome.html', username=session['username'])
+        #else:
+            #return render_template('adminHome.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -428,13 +428,13 @@ def carBooking():
             print("ends at: ", event_result['end']['dateTime'])
 
 
-
+            current = "current"
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
             #cursor.execute('INSERT INTO `bookings`  
 
-            cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays,))
+            cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`, `carId`, `current`) VALUES (%s, %s, %s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays, bookingCarId, current,))
             mysql.connection.commit()
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -486,30 +486,34 @@ def cancelBooking():
     
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelCarId,))
+            cursor.execute('SELECT * FROM cars WHERE id = %s', (cancelCarId,))
             cars = cursor.fetchone()
             mysql.connection.commit()
+            
+            cancelled = "cancelled"
                
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, cancelCarId,))
+            cursor.execute('UPDATE bookings SET current = %s WHERE userid = %s AND carId = %s', (cancelled, username, cancelCarId,))
             mysql.connection.commit()
-
+        
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM bookings WHERE carId = %s', (cancelCarId,))
+            booking = cursor.fetchone()
+            mysql.connection.commit()
+        
             #app.logger.info(cars['calendarId'])
-            print(cars['calendarId'])
+            print(booking['calendarId'])
             service = get_calendar_service()
             try:
                service.events().delete(
                     calendarId='primary',
-                    eventId=cars['calendarId'],
+                    eventId=booking['calendarId'],
                 ).execute()
             except:
                print("Failed to delete event")
             
             print("Event deleted")
-
-
-
-            
             
             return render_template('home.html')
 

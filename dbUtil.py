@@ -46,8 +46,8 @@ class DatabaseUtils:
                 `firstName` varchar(50) NOT NULL,
                 `date` varchar(255) NOT NULL,
                 `daysBooked` int(10) NOT NULL,
-
-
+                `carId` int(10) NOT NULL,
+                `current` varchar(10),
 
                 PRIMARY KEY (`bookingId`)
 
@@ -80,7 +80,7 @@ class DatabaseUtils:
     def insertPerson(self, name):
         with self.connection.cursor() as cursor:
 
-            cursor.execute('UPDATE cars SET bookedBy = "Test" WHERE id = 2')
+            #cursor.execute('UPDATE cars SET bookedBy = "Test" WHERE id = 2')
                           #'UPDATE cars SET bookedBy = "admin" WHERE id = 2'
             #cursor.execute("INSERT INTO `cars` VALUES (1,'Ford Falcon','Sedan','Red',4,'Melbourne',20,'', TRUE),(2,'Ford Falcon','Sedan','Red',4,'Melbourne',20,'', TRUE),(3,'Ford Fiesta','Hatch','Blue',2,'Sydney',40,'', TRUE),(4,'Lamborghini Aventador','4WD','Yellow',6,'Hobart',60,'', TRUE),(5,'Nissan Patrol','Ute','Red',3,'Melbourne',20,'', TRUE),(6,'A bus','Truck','Black',4,'Perth',50,'', TRUE),(7,'Mazda 3','Sedan','Green',5,'Brisbane',70,'', TRUE),(8,'Ford Falcon','Sedan','White',5,'Brisbane',10,'', TRUE),(9,'Honda Accord','Hatch','White',8,'Sydney',20,'', TRUE),(10,'Ford Territory','Sedan','Purple',4,'Melbourne',100,'', TRUE),(11,'Holden Ute','Sedan','Yellow',4,'Melbourne',20,'', TRUE),(12,'Subaru Imprezza','Hatch','Blue',4,'Ivanhoe',69,'Cathy', FALSE)")
 
