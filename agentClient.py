@@ -22,8 +22,8 @@ import hashlib
 def main():
     #Intialize time variable
     now = datetime.datetime.now()
-    
-    HOST = "192.168.0.192" # The server's hostname or IP address.
+    HOST = input("Enter IP address of server: ")
+    #HOST = "192.168.0.192" # The server's hostname or IP address.
     PORT = 65000         # The port used by the server.
     ADDRESS = (HOST, PORT)
     #Opens socket for connection

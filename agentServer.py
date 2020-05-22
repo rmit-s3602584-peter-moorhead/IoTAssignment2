@@ -51,7 +51,7 @@ def main():
                     print("Car ID is: {}".format(carID))
                     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                     cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (us, pa,))
-            
+                    
                     account = cursor.fetchone()
             
                     if account:
@@ -66,21 +66,24 @@ def main():
                     carState = carStatus.decode()
                     #Change car state to 0
                     if carState == "0":
-                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
-                        tbl = cursor.execute("SELECT * from cars")
-                        #print(cursor.fetchall())
+                        carStr = "In Use"
+                        cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
+                        connection.commit()
                         #print("state changed to 0")
                     #Change car state to 1
                     elif carState == "1":
-                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
-                        tbl = cursor.execute("SELECT * from cars")
-                        #print(cursor.fetchall())
+                        carStr = "Returned"
+                        cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
+                        connection.commit()
                         #print("changed to 1")
                     #Get and Update location of AgentPi
                     location = conn.recv(4096)
                     loc = (location.decode())
                     print(loc)
-                    cursor.execute('UPDATE cars SET Location=%s WHERE id=%s', (loc, carID))
+                    cursor.execute('UPDATE cars SET longlat=%s WHERE id=%s', (loc, carID))
+                    connection.commit()
+                    cursor.execute("SELECT * from cars") 
+                    print(cursor.fetchall())
                 #If user uses faceID    
                 elif reply == "2":
                     user = conn.recv(4096)
@@ -94,18 +97,22 @@ def main():
                     carState = carStatus.decode()
                     #Change car state to 0
                     if carState == "0":
-                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
-                        #tbl = cursor.execute("SELECT * from cars")
-                        #print(cursor.fetchall())
+                        carStr = "In Use"
+                        cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
+                        mysql.connection.commit()
                     #Change car state to 1
                     elif carState == "1":
-                        cursor.execute('UPDATE cars SET Returned=%s WHERE id=%s', (carState, carID))
+                        carStr = "Returned"
+                        cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
+                        mysql.connection.commit()
                     #Get and Update location of AgentPi
                     location = conn.recv(4096)
                     loc = (location.decode())
                     print(loc)
-                    cursor.execute('UPDATE cars SET Location=%s WHERE id=%s', (loc, carID))
-                    tbl = cursor.execute("SELECT * from cars")
+                    cursor.execute('UPDATE cars SET longlat=%s WHERE id=%s', (loc, carID))
+                    mysql.connection.commit()
+                    cursor.execute("SELECT * from cars") 
+                    print(cursor.fetchall())
                 time = conn.recv(4096)
                 print(time.decode())
                 break
