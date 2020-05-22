@@ -1,12 +1,15 @@
 #main file
 from flask import Flask, render_template, request, url_for, session, redirect
 from flask_mysqldb import MySQL
-from datetime import datetime
 import MySQLdb.cursors
 import re
 import sys
+
 from datetime import datetime, timedelta
 from cal_setup import get_calendar_service
+
+import hashlib
+
 
 app = Flask(__name__)
 
@@ -54,9 +57,14 @@ def login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
+        # generates a Salt and Hashes the Password with sha256
+        salt = "lcyysk2NAQOJCHxkM1fA"
+        saltPass = password+salt
+        hashPass = hashlib.sha256(saltPass.encode())
+        encryptPass = hashPass.hexdigest()
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, encryptPass,))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists in accounts table in out database
@@ -112,6 +120,11 @@ def register():
         lastName = request.form['lastName']
         email = request.form['email']
         customer = "Customer"
+        # Generates a Salt and Hashes the Password with sha256
+        salt = "lcyysk2NAQOJCHxkM1fA"
+        saltPass = password+salt
+        hashPass = hashlib.sha256(saltPass.encode())
+        encryptPass = hashPass.hexdigest()
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
@@ -127,9 +140,10 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s)', (username, password, firstName, lastName, email, customer,))
+            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
+            return redirect(url_for('login'))
     elif request.method == 'POST':
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
@@ -156,7 +170,8 @@ def home():
                 cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
                 history = cursor.fetchall()
                 
-                return render_template('home.html', history=history)
+
+                return render_template('home.html', history=history, username=session['username'])
             else:
                 return render_template('cars.html')
             
@@ -199,10 +214,20 @@ def cars():
         #cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
         #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
         cars = cursor.fetchall()
+
+        my_string = ""
+        cout = 0 
+        for row in cars:
+            my_string = my_string + row['longlat'] + '|'
+
+        print(my_string)
         # Show the profile page with account info
-        return render_template('cars.html', cars=cars)
+        return render_template('cars.html', cars=cars, my_string=my_string)
+    
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+    
 
 @app.route('/carManagement')
 def carManagement():
@@ -339,7 +364,15 @@ def carQuery():
                 #return redirect(url_for('cars'))
                 cars = cursor.fetchall()
                 # Show the profile page with account info
-                return render_template('cars.html', cars=cars)
+                my_string = ""
+                cout = 0 
+                for row in cars:
+                    my_string = my_string + row['longlat'] + '|'
+
+                print(my_string)
+                # Show the profile page with account info
+                return render_template('cars.html', cars=cars, my_string=my_string)
+                            
             
         
     return redirect(url_for('login'))
@@ -395,15 +428,16 @@ def carBooking():
             print("ends at: ", event_result['end']['dateTime'])
 
 
+
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
             #cursor.execute('INSERT INTO `bookings`  
+
             cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays,))
             
             mysql.connection.commit()
 
-            
             return render_template('cars.html')
         else:
             return render_template('profile.html')
@@ -452,6 +486,7 @@ def cancelBooking():
             
             
             return render_template('home.html')
+
         else:
             return render_template('profile.html')
         
