@@ -1,6 +1,7 @@
-Code docs
-=========
+main module
+===========
 
-.. module:: main
-:functions:
-
+.. automodule:: main
+    :members:
+    :undoc-members:
+    :show-inheritance:
