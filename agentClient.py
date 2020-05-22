@@ -6,9 +6,7 @@ import datetime
 import requests
 import json
 import os
-import bluetooth
 import time
-from sense_hat import SenseHat
 from imutils.video import VideoStream
 import face_recognition
 import argparse
@@ -22,8 +20,9 @@ import hashlib
 def main():
     #Intialize time variable
     now = datetime.datetime.now()
-    HOST = input("Enter IP address of server: ")
-    #HOST = "192.168.0.192" # The server's hostname or IP address.
+    #HOST = input("Enter IP address of server: ")
+    #HOST = "110.144.55.243"
+    HOST = "192.168.0.192" # The server's hostname or IP address.
     PORT = 65000         # The port used by the server.
     ADDRESS = (HOST, PORT)
     #Opens socket for connection
@@ -153,11 +152,11 @@ def faceID():
     args = vars(ap.parse_args())
 
     # Load taken photos encodings
-    print("[INFO] loading encodings...")
+    print("Preparing encodings...")
     data = pickle.loads(open(args["encodings"], "rb").read())
 
     # Initialize and Turn on Web Cam
-    print("[INFO] starting video stream...")
+    print("Video Stream On")
     vs = VideoStream(src = 0).start()
     time.sleep(2.0)
 
