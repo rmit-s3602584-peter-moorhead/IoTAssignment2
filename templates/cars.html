@@ -1,0 +1,205 @@
+{% extends 'layout.html' %}
+{% block title %}Cars{% endblock %}
+
+
+{% block content %}
+<h2>Car Search</h2>
+<p>This is where you can search and book cars.</p>
+<input type="text" id="myInputidSearch" onkeyup="idSearch()" 
+placeholder="Search for id.." title="Type in an id">
+<input type="text" id="myInputmakeSearch" onkeyup="makeSearch()" 
+placeholder="Search for make.." title="Type in a make">
+<input type="text" id="myInputbodyTypeSearch" onkeyup="bodyTypeSearch()" 
+placeholder="Search for body type.." title="Type in a body type">
+<input type="text" id="myInputcolourSearch" onkeyup="colourSearch()" 
+placeholder="Search for colour.." title="Type in a colour">
+<input type="text" id="myInputseatsSearch" onkeyup="seatsSearch()" 
+placeholder="Search for seat amount.." title="Type in an amount of seats">
+<input type="text" id="myInputlocationSearch" onkeyup="locationSearch()" 
+placeholder="Search for location.." title="Type in a location">
+<input type="text" id="myInputcostSearch" onkeyup="costSearch()" 
+placeholder="Search for cost per hour.." title="Type in a cost per hour">
+<input type="text" id="myInputbookedSearch" onkeyup="bookedSearch()" 
+placeholder="Search for booked by.." title="Type in who booked it">
+<table id="myTable">
+<TR>
+	<TH>Id</TH>
+	<TH>Make</TH>
+	<TH>Body Type</TH>
+	<TH>Colour</TH>
+	<TH>Seats</TH>
+	<TH>Location</TH>
+	<TH>Cost</TH>
+	<TH>BookedBy</TH>
+</TR>
+
+{% for row in cars %}
+<TR>
+	<TD>{{row.id}}</TD>
+	<TD>{{row.make}}</TD>
+	<TD>{{row.bodyType}}</TD>
+	<TD>{{row.colour}}</TD>
+	<TD>{{row.seats}}</TD>
+	<TD>{{row.location}}</TD>
+	<TD>{{row.cost}}</TD>
+	<TD>{{row.bookedBy}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+<script>
+function idSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputidSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[0];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function makeSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputmakeSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[1];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function bodyTypeSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputbodyTypeSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[2];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function colourSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputcolourSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[3];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function seatsSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputseatsSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[4];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function locationSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputlocationSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[5];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function costSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputcostSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[6];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+
+function bookedSearch() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInputbookedSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("TR");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("TD")[7];
+        if (td) {
+	    txtValue = td.textContent || td.innerText;
+	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+	    }
+        }
+    }
+}
+</script>
+
+
+{% endblock %}
