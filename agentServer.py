@@ -99,18 +99,18 @@ def main():
                     if carState == "0":
                         carStr = "In Use"
                         cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
-                        mysql.connection.commit()
+                        connection.commit()
                     #Change car state to 1
                     elif carState == "1":
                         carStr = "Returned"
                         cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
-                        mysql.connection.commit()
+                        connection.commit()
                     #Get and Update location of AgentPi
                     location = conn.recv(4096)
                     loc = (location.decode())
                     print(loc)
                     cursor.execute('UPDATE cars SET longlat=%s WHERE id=%s', (loc, carID))
-                    mysql.connection.commit()
+                    connection.commit()
                     cursor.execute("SELECT * from cars") 
                     print(cursor.fetchall())
                 time = conn.recv(4096)
