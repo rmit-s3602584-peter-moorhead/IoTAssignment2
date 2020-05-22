@@ -53,7 +53,8 @@ class Menu:
         print("{:<15} {}".format("carId", "Make"))
         with DatabaseUtils() as db:
             for person in db.getCars():
-                print("{:<15} {}".format(person[0]))
+                #print("{:<15} {}".format(person[0]))
+                print(person)
                 
     def dropTable(self):
         print("----Drop Table----")

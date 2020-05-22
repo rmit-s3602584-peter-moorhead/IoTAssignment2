@@ -123,7 +123,7 @@ class DatabaseUtils:
 
     def getPeople(self):
         with self.connection.cursor() as cursor:
-            cursor.execute("select id, username from users")
+            cursor.execute("select calendarId, bookingId from bookings")
             return cursor.fetchall()
     
     def getCars(self):

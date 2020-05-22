@@ -435,9 +435,22 @@ def carBooking():
             #cursor.execute('INSERT INTO `bookings`  
 
             cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`) VALUES (%s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays,))
+            mysql.connection.commit()
             
-            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars')
+            #cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
+            #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
+            cars = cursor.fetchall()
 
+            my_string = ""
+            cout = 0 
+            for row in cars:
+                my_string = my_string + row['longlat'] + '|'
+
+            print(my_string)
+            # Show the profile page with account info
+            return render_template('cars.html', cars=cars, my_string=my_string)
 
             #my_string = ""
 
@@ -446,11 +459,11 @@ def carBooking():
 #
             #print(my_string)
 
-            #mysql.connection.commit()
+            
             # Show the profile page with account info
             #return render_template('cars.html', cars=cars, my_string=my_string)
 
-            return redirect(url_for('cars'))
+            #return redirect(url_for('cars'))
             #return render_template('cars.html')
         else:
             return render_template('profile.html')
@@ -482,7 +495,7 @@ def cancelBooking():
             mysql.connection.commit()
 
             #app.logger.info(cars['calendarId'])
-
+            print(cars['calendarId'])
             service = get_calendar_service()
             try:
                service.events().delete(
