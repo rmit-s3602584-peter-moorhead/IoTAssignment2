@@ -465,80 +465,89 @@ def carBooking():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM cars WHERE id = %s', (bookingCarId,))               
             cars = cursor.fetchone()
-
-
-
-    
-
-            
-
-            
-            service = get_calendar_service()
-            
-            
-            d = datetime.now().date()
-            #change this for the amount of 
-            numDayBook = 1
-            startBook = datetime(d.year, d.month, d.day, 10)
-            endBook = datetime(d.year, d.month, d.day, 10)+timedelta(days=int(bookingCarDays))
-            start = startBook.isoformat()
-            end = endBook.isoformat()
-
-            event_result = service.events().insert(calendarId='primary',
-                body={ 
-                    "summary": firstName, 
-                    "description": cars['make'],
-                    "start": {"dateTime": start, "timeZone": 'Australia/Sydney'}, 
-                    "end": {"dateTime": end, "timeZone": 'Australia/Sydney'},
-                }
-            ).execute()
-
-            eventId = event_result['id']
-            
-            print("created event")
-            print("id: ", event_result['id'])
-            print("summary: ", event_result['summary'])
-            print("starts at: ", event_result['start']['dateTime'])
-            print("ends at: ", event_result['end']['dateTime'])
-
-
-            current = "current"
-            
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
-            #cursor.execute('INSERT INTO `bookings`  
-
-            cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`, `carId`, `current`) VALUES (%s, %s, %s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays, bookingCarId, current,))
             mysql.connection.commit()
             
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM cars')
-            #cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
-            #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
-            cars = cursor.fetchall()
 
-            my_string = ""
-            cout = 0 
-            for row in cars:
-                my_string = my_string + row['longlat'] + '|'
+            if cars != None:
+                print("fhjsdfjhkdsfhsdjkfh------------------------------------------------------------")
+                print(cars)
+                if bookingCarDays.isdigit() == True:
+                    print('-------------------------------------------------')
+                    
 
-            print(my_string)
-            # Show the profile page with account info
-            return render_template('cars.html', cars=cars, my_string=my_string)
+                    
+                    service = get_calendar_service()
+                    
+                    
+                    d = datetime.now().date()
+                    #change this for the amount of 
+                    numDayBook = 1
+                    startBook = datetime(d.year, d.month, d.day, 10)
+                    endBook = datetime(d.year, d.month, d.day, 10)+timedelta(days=int(bookingCarDays))
+                    start = startBook.isoformat()
+                    end = endBook.isoformat()
 
-            #my_string = ""
+                    event_result = service.events().insert(calendarId='primary',
+                        body={ 
+                            "summary": firstName, 
+                            "description": cars['make'],
+                            "start": {"dateTime": start, "timeZone": 'Australia/Sydney'}, 
+                            "end": {"dateTime": end, "timeZone": 'Australia/Sydney'},
+                        }
+                    ).execute()
 
-            #for row in cars:
-            #    my_string = my_string + row['longlat'] + '|'
-#
-            #print(my_string)
+                    eventId = event_result['id']
+                    
+                    print("created event")
+                    print("id: ", event_result['id'])
+                    print("summary: ", event_result['summary'])
+                    print("starts at: ", event_result['start']['dateTime'])
+                    print("ends at: ", event_result['end']['dateTime'])
 
-            
-            # Show the profile page with account info
-            #return render_template('cars.html', cars=cars, my_string=my_string)
 
-            #return redirect(url_for('cars'))
-            #return render_template('cars.html')
+                    current = "current"
+                    
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, bookingCarId,))
+                    #cursor.execute('INSERT INTO `bookings`  
+
+                    cursor.execute('INSERT INTO `bookings` (`calendarId`, `userid`, `firstName`, `date`, `daysBooked`, `carId`, `current`) VALUES (%s, %s, %s, %s, %s, %s, %s)', (eventId, userid, firstName, date, bookingCarDays, bookingCarId, current,))
+                    mysql.connection.commit()
+                    
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT * FROM cars')
+                    #cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
+                    #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
+                    cars = cursor.fetchall()
+
+                    my_string = ""
+                    cout = 0 
+                    for row in cars:
+                        my_string = my_string + row['longlat'] + '|'
+
+                    print(my_string)
+                    # Show the profile page with account info
+                    return render_template('cars.html', cars=cars, my_string=my_string)
+
+                    #my_string = ""
+
+                    #for row in cars:
+                    #    my_string = my_string + row['longlat'] + '|'
+                    #print(my_string)
+
+                    
+                    # Show the profile page with account info
+                    #return render_template('cars.html', cars=cars, my_string=my_string)
+
+                    #return redirect(url_for('cars'))
+                    #return render_template('cars.html')
+                else:
+                    print(cars)
+                    return redirect(url_for('cars'))
+            else:
+                      
+                print('fdfhjdjhdfjhdfk')
+                return redirect(url_for('cars'))
         else:
             return render_template('profile.html')
         
