@@ -6,6 +6,17 @@
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+# First Time Running
+# Import Dependencies
+# sudo apt-get install python3-sphinx
+
+# Command with correct pathing to reinitialize html files
+# When building source directory with new rst files FORMAT: sphinx-apidoc -o [OUTPUT_PATH][MODULE_PATH]
+# sphinx-apidoc -o . ..
+# make clean
+# make html
+
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -16,7 +27,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-# Add pathing if your code is in a diff foler
+# Add pathing if your code is in a different folder from the root directory
 # sys.path.append('filename')
 
 # -- Project information -----------------------------------------------------
