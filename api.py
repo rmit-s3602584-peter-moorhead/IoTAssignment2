@@ -478,13 +478,21 @@ def cancelBooking():
     if 'loggedin' in session:
         if request.method == 'POST':
             userid = session['id']
-            username = ""
+            
+            emptyUsername = ""
             firstName = session['firstName']
 
-            cancelCarId = request.form['cancelCarId']
+            cancelBookingId = request.form['cancelCarId']
 
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelBookingId,))
+            cancelBooking = cursor.fetchone()
+            mysql.connection.commit()
     
-            
+
+            cancelCarId = cancelBooking['carId']
+
+
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM cars WHERE id = %s', (cancelCarId,))
             cars = cursor.fetchone()
@@ -493,12 +501,12 @@ def cancelBooking():
             cancelled = "cancelled"
                
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (username, cancelCarId,))
-            cursor.execute('UPDATE bookings SET current = %s WHERE userid = %s AND carId = %s', (cancelled, username, cancelCarId,))
+            cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (emptyUsername, cancelCarId,))
+            cursor.execute('UPDATE bookings SET current = %s WHERE bookingId = %s', (cancelled, cancelBookingId,))
             mysql.connection.commit()
         
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM bookings WHERE carId = %s', (cancelCarId,))
+            cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelBookingId,))
             booking = cursor.fetchone()
             mysql.connection.commit()
         
