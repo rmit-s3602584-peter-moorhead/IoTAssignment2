@@ -8,6 +8,7 @@ python3 -m venv venv
 . venv/bin/activate
 pip3 install flask
 pip3 install flask-mysqldb
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 export FLASK_APP=IoTAssignment2
 pip install -e .
 flask run
