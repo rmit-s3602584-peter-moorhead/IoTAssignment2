@@ -208,11 +208,8 @@ def cars():
     # Check if user is loggedin
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
-        #available = ''
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM cars')
-        #cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (available,))
-        #cursor.execute('SELECT * FROM cars WHERE make = "Ford Falcon"')
         cars = cursor.fetchall()
 
         my_string = ""
@@ -266,8 +263,7 @@ def carQuery():
             #return render_template('cars.html', cars=cars)
             return render_template('home.html')
         else:
-            
-            
+
             idcar = request.form['idCar']
             make = request.form['make']
             bodyType = request.form['bodyType']
@@ -279,6 +275,56 @@ def carQuery():
             bookedBy = request.form['bookedBy']
             returned = 0
 
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars')
+            carData = cursor.fetchall()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE id = %s', (idcar,))
+            carIdData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE make = %s', (make,))
+            carMakeData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE bodyType = %s', (bodyType,))
+            carBodyTypeData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE colour = %s', (colour,))
+            carColourData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE seats = %s', (seats,))
+            carSeatsData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE location = %s', (location,))
+            carLocationData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE cost = %s', (cost,))
+            carCostData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (bookedBy,))
+            carBookedByData = cursor.fetchone()
+            mysql.connection.commit()
+            
+            
+
+            print(type(carData))
+            
+            
             sqlExpression = 'SELECT * FROM cars'
             count = 0
             
@@ -287,78 +333,99 @@ def carQuery():
             else:
                 sqlExpression = 'SELECT * FROM cars WHERE '
                 if idcar != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' id = ' + idcar
+                    if carIdData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' id = ' + idcar 
+                        else:
+                            sqlExpression = sqlExpression + ' id = ' + idcar
+                            count = 1
+                            print(count)
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' id = ' + idcar
-                        count = 1
-                        app.logger.info(count)
-
+                        return redirect(url_for('cars'))
                 if make != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' make = ' + '"' + make + '"'
+                    if carMakeData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' make = ' + '"' + make + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' make = ' + '"' + make + '"'
+                            count += 1
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' make = ' + '"' + make + '"'
-                        count += 1
-                        app.logger.info(count)
-                        
+                        return redirect(url_for('cars'))
+                    
                 if bodyType != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' bodyType = ' + '"' + bodyType + '"'
+                    if carBodyTypeData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' bodyType = ' + '"' + bodyType + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' bodyType = ' + '"' + bodyType + '"'
+                            count = 1
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' bodyType = ' + '"' + bodyType + '"'
-                        count = 1
-                        app.logger.info(count)
+                       return redirect(url_for('cars'))
                         
                 if colour != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' colour = ' + '"' + colour + '"'
+                    if carColourData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' colour = ' + '"' + colour + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' colour = ' + '"' + colour + '"'
+                            count = 1
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' colour = ' + '"' + colour + '"'
-                        count = 1
-                        app.logger.info(count)
+                        return redirect(url_for('cars'))
                         
                 if seats != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' seats = ' + '"' + seats + '"'
+                    if carSeatsData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' seats = ' + '"' + seats + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' seats = ' + '"' + seats + '"'
+                            count = 1
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' seats = ' + '"' + seats + '"'
-                        count = 1
-                        app.logger.info(count)
+                        return redirect(url_for('cars'))
                         
                 if location != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' location = ' + '"' + location + '"'
+                    if carLocationData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' location = ' + '"' + location + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' location = ' + '"' + location + '"'
+                            count = 1
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' location = ' + '"' + location + '"'
-                        count = 1
-                        app.logger.info(count)
+                        return redirect(url_for('cars'))
                         
                 if cost != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' cost = ' + '"' + cost + '"'
-                    else:
-                        sqlExpression = sqlExpression + ' cost = ' + '"' + cost + '"'
-                        count = 1
-                        app.logger.info(count)
+                   if carCostData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' cost = ' + '"' + cost + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' cost = ' + '"' + cost + '"'
+                            count = 1
+                            app.logger.info(count)
+                   else:
+                        return redirect(url_for('cars'))
                         
                 if bookedBy != '':
-                    if count != 0:
-                        sqlExpression = sqlExpression + ' AND ' + ' bookedBy = ' + '"' + bookedBy + '"'
+                    if carBookedByData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' bookedBy = ' + '"' + bookedBy + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' bookedBy = ' + '"' + bookedBy + '"'
+                            count = 1
+                            app.logger.info(count)
                     else:
-                        sqlExpression = sqlExpression + ' bookedBy = ' + '"' + bookedBy + '"'
-                        count = 1
-                        app.logger.info(count)
-                        
+                        return redirect(url_for('cars'))
+                print (carMakeData)
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*!!!!!!!!!!!!!!!!!!!!") 
                 app.logger.info(sqlExpression)
                 
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-                #cursor.execute('SELECT * FROM cars WHERE id = s% AND make = s% AND bodyType = s% AND colour = s% AND seats = s% AND location = s% AND cost = s% AND bookedBy = s%', (idcar, make, bodyType, colour, seats, location, cost, bookedBy,))
-                #cursor.execute('SELECT * FROM cars WHERE id = %s OR make = %s OR bodyType = %s OR colour = %s OR seats = %s OR location = %s OR cost = %s OR bookedBy = %s OR returned = %s', (idcar, make, bodyType, colour, seats, location, cost, bookedBy, returned,))
-                
-                #cursor.execute('SELECT * FROM cars WHERE id = %s OR make = %s OR bodyType = %s OR colour = %s OR seats = %s OR location = %s OR cost = %s', (idcar, make, bodyType, colour, seats, location, cost,))
-                #cursor.execute('SELECT * FROM cars WHERE id = %s AND make = %s AND bodyType = %s AND colour = %s AND seats = %s AND location = %s AND cost = %s', (idcar, make, bodyType, colour, seats, location, cost,))
                 cursor.execute(sqlExpression)
+
                 #cursor.execute('SELECT * FROM cars WHERE  bodyType = "Sedan"')
 
                 #return redirect(url_for('cars'))
@@ -398,6 +465,13 @@ def carBooking():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM cars WHERE id = %s', (bookingCarId,))               
             cars = cursor.fetchone()
+
+
+
+    
+
+            
+
             
             service = get_calendar_service()
             
@@ -481,50 +555,82 @@ def cancelBooking():
             
             emptyUsername = ""
             firstName = session['firstName']
+            username = session['username']
 
             cancelBookingId = request.form['cancelCarId']
 
+            
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelBookingId,))
             cancelBooking = cursor.fetchone()
             mysql.connection.commit()
-    
-
-            cancelCarId = cancelBooking['carId']
-
 
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM cars WHERE id = %s', (cancelCarId,))
-            cars = cursor.fetchone()
+            cursor.execute('SELECT bookingId FROM bookings')
+            allBooking = cursor.fetchall()
             mysql.connection.commit()
-            
-            cancelled = "cancelled"
+            print("this fhithdjfh jskdfg hjkdsh fjksd fdjhskf sdjk :%s", allBooking)
+            green = allBooking
+            #intCancelBookingId = int(cancelBookingId)
+            print(cancelBooking)
+            print(green)
+            print("here 1\/\/\/\/\/\/\/\/\/\/\/\/\/")
+
+            if cancelBooking != None:
+                
+                    print("here 3\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
+                    
+                    cancelCarId = cancelBooking['carId']
+                       
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT * FROM cars WHERE id = %s', (cancelCarId,))
+                    cars = cursor.fetchone()
+                    mysql.connection.commit()
+                    
+                    cancelled = "cancelled"
+                       
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (emptyUsername, cancelCarId,))
+                    cursor.execute('UPDATE bookings SET current = %s WHERE bookingId = %s', (cancelled, cancelBookingId,))
+                    mysql.connection.commit()
+                
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelBookingId,))
+                    booking = cursor.fetchone()
+                    mysql.connection.commit()
+                
+                    #app.logger.info(cars['calendarId'])
+                    print(booking['calendarId'])
+                    service = get_calendar_service()
+                    try:
+                       service.events().delete(
+                            calendarId='primary',
+                            eventId=booking['calendarId'],
+                        ).execute()
+                    except:
+                       print("Failed to delete event")
+                    
+                    print("Event deleted")
+
+
+                    userid = session['id']
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
+                    history = cursor.fetchall()
+                    mysql.connection.commit()
+                    
+                    return render_template('home.html', username=username, history=history)
+
                
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('UPDATE cars SET bookedBy = %s WHERE id = %s', (emptyUsername, cancelCarId,))
-            cursor.execute('UPDATE bookings SET current = %s WHERE bookingId = %s', (cancelled, cancelBookingId,))
-            mysql.connection.commit()
-        
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM bookings WHERE bookingId = %s', (cancelBookingId,))
-            booking = cursor.fetchone()
-            mysql.connection.commit()
-        
-            #app.logger.info(cars['calendarId'])
-            print(booking['calendarId'])
-            service = get_calendar_service()
-            try:
-               service.events().delete(
-                    calendarId='primary',
-                    eventId=booking['calendarId'],
-                ).execute()
-            except:
-               print("Failed to delete event")
-            
-            print("Event deleted")
-            
-            return render_template('home.html')
+                
+            else:
+                userid = session['id']
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
+                history = cursor.fetchall()
+                mysql.connection.commit()
 
+                return render_template('home.html', username=username, history=history)
         else:
             return render_template('profile.html')
         
