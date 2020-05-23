@@ -9,7 +9,6 @@ import os
 import time
 from imutils.video import VideoStream
 import face_recognition
-import argparse
 import imutils
 import pickle
 import cv2
@@ -54,9 +53,10 @@ def main():
                 carID = input("Car ID:")
                 s.sendall(carID.encode())
                 device_name = "Galaxy S9"
-                print("test 4")
                 reply = s.recv(4096)
-                print("test 3")
+                if not reply:
+                    print("Invalid Input Received")
+                    break
                 rep = reply.decode()
                 print(rep)
                 if rep == "true":
@@ -83,17 +83,30 @@ def main():
                     print("Incorrect Login")
                     break
                 else:
-                    print("ERROR")
+                    print("ERROR - Invalid Input - ERROR")
                     break
                 
             #FaceID section 
             elif sel == "2":
                 dec = "2"
                 s.sendall(dec.encode())
+                name = None
                 name = faceID()
+                if name == None:
+                    name = "Invalid"
+                    print("Invalid User - Disconnecting")
+                    s.sendall(name.encode())
+                    return
                 s.sendall(name.encode())
                 carID = input("Car ID:")
                 s.sendall(carID.encode())
+                msg = s.recv(4096)
+                m = msg.decode()
+                if m == "false":
+                    print("Invalid Car Id - Disconnecting")
+                    return
+                elif m == "true":
+                    pass
                 print("1. Unlock Car")
                 print("2. Return Car")
                 choice = input("Enter choice: ")
@@ -112,18 +125,23 @@ def main():
                     s.sendall(location.encode())  
                 else:
                     print("Invalid Input")
-                    break
+                    return
                 s.sendall(time.encode())    
                 break
                     
               
             else:
                 print("Invalid Input")
-                break
-            break 
+                return
+             
         print("Disconnecting from server.")
         msg = s.recv(4096)
+        if not msg:
+            print("Invalid Input Received")
+            
         print(msg.decode())
+        s.shutdown(socket.SHUT_WR)
+        s.close()
     print("Done.")
     
 
@@ -141,19 +159,10 @@ def getLoc():
 #https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
 #Facial Recognition Function
 def faceID():
-    # Argument Parser
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-e", "--encodings", default="encodings.pickle",
-    help="path to serialized db of facial encodings")
-    ap.add_argument("-r", "--resolution", type=int, default=240,
-        help="Resolution of the video feed")
-    ap.add_argument("-d", "--detection-method", type=str, default="hog",
-        help="face detection model to use: either `hog` or `cnn`")
-    args = vars(ap.parse_args())
 
-    # Load taken photos encodings
+    # Load taken photos encoding
     print("Preparing encodings...")
-    data = pickle.loads(open(args["encodings"], "rb").read())
+    data = pickle.loads(open("encodings.pickle", "rb").read())
 
     # Initialize and Turn on Web Cam
     print("Video Stream On")
@@ -167,10 +176,10 @@ def faceID():
 
         # Convert from BGR to RGB and resize
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        rgb = imutils.resize(frame, width = args["resolution"])
+        rgb = imutils.resize(frame, width = 240)
 
         # Detect the (x, y)-coordinates then compute facial embeddings
-        boxes = face_recognition.face_locations(rgb, model = args["detection_method"])
+        boxes = face_recognition.face_locations(rgb, model = "hog")
         encodings = face_recognition.face_encodings(rgb, boxes)
         names = []
 
