@@ -4,6 +4,8 @@ Installation:
 
 clone repo
 copy setup.py to same level as repo folder
+copy credentials.json to same level as repo folder
+copy token.pickle to same level as repo folder
 python3 -m venv venv
 . venv/bin/activate
 pip3 install flask
