@@ -4,4 +4,39 @@
 {% block content %}
 <h2>Home page</h2>
 <p>Welcome, {{ username }}!</p>
+
+<h2>User History</h2>
+
+<table id="myTable">
+<TR>
+	<TH>Booking Id</TH>
+	<TH>First Name</TH>
+    <TH>Date</TH>
+    <TH>Days Booked</TH>
+    <TH>Car Id</TH>
+    <TH>Status</TH>
+</TR>
+
+{% for row in history %}
+<TR>
+	<TD>{{row.bookingId}}</TD>
+	<TD>{{row.firstName}}</TD>
+    <TD>{{row.date}}</TD>
+    <TD>{{row.daysBooked}}</TD>
+    <TD>{{row.carId}}</TD>
+    <TD>{{row.current}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+
+<h2>Cancel Booking<h2>
+<form action="{{ url_for('cancelBooking') }}" method="post" autocomplete="off">
+	
+	<input type="text" name="cancelCarId" placeholder="Cancel by car id" id="cancelCarId">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Submit Cancellation">
+</form>
+
+
 {% endblock %}

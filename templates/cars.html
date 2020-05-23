@@ -5,22 +5,20 @@
 {% block content %}
 <h2>Car Search</h2>
 <p>This is where you can search and book cars.</p>
-<input type="text" id="myInputidSearch" onkeyup="idSearch()" 
-placeholder="Search for id.." title="Type in an id">
-<input type="text" id="myInputmakeSearch" onkeyup="makeSearch()" 
-placeholder="Search for make.." title="Type in a make">
-<input type="text" id="myInputbodyTypeSearch" onkeyup="bodyTypeSearch()" 
-placeholder="Search for body type.." title="Type in a body type">
-<input type="text" id="myInputcolourSearch" onkeyup="colourSearch()" 
-placeholder="Search for colour.." title="Type in a colour">
-<input type="text" id="myInputseatsSearch" onkeyup="seatsSearch()" 
-placeholder="Search for seat amount.." title="Type in an amount of seats">
-<input type="text" id="myInputlocationSearch" onkeyup="locationSearch()" 
-placeholder="Search for location.." title="Type in a location">
-<input type="text" id="myInputcostSearch" onkeyup="costSearch()" 
-placeholder="Search for cost per hour.." title="Type in a cost per hour">
-<input type="text" id="myInputbookedSearch" onkeyup="bookedSearch()" 
-placeholder="Search for booked by.." title="Type in who booked it">
+
+<form action="{{ url_for('carQuery') }}" method="post" autocomplete="off">
+	<input type="text" name="idCar" placeholder="Seach by id" id="idCar">
+	<input type="text" name="make" placeholder="Seach by make" id="make">
+	<input type="text" name="bodyType" placeholder="Seach by body type" id="bodyType">
+	<input type="text" name="colour" placeholder="Seach by colour" id="colour">
+	<input type="text" name="seats" placeholder="Seach by number of seats" id="seats">
+	<input type="text" name="location" placeholder="Seach by location" id="location">
+	<input type="text" name="cost" placeholder="Seach by cost per hour" id="cost">
+	<input type="text" name="bookedBy" placeholder="Seach by user booked" id="bookedBy">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
 <table id="myTable">
 <TR>
 	<TH>Id</TH>
@@ -31,6 +29,8 @@ placeholder="Search for booked by.." title="Type in who booked it">
 	<TH>Location</TH>
 	<TH>Cost</TH>
 	<TH>BookedBy</TH>
+	<TH>LongLat</TH>
+	<TH>Returned</TH>
 </TR>
 
 {% for row in cars %}
@@ -43,163 +43,34 @@ placeholder="Search for booked by.." title="Type in who booked it">
 	<TD>{{row.location}}</TD>
 	<TD>{{row.cost}}</TD>
 	<TD>{{row.bookedBy}}</TD>
+	<TD>{{row.longlat}}</TD>
+	<TD>{{row.returned}}</TD>
 </TR>
 {% endfor %}
 </table>
 
-<script>
-function idSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputidSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[0];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
+<!--Google maps API -->
+{% set url_string = "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=10&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C" + my_string + "&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY" %}
 
-function makeSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputmakeSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[1];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
+<p>
+<img src= {{url_string}}>
+</p>
 
-function bodyTypeSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputbodyTypeSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[2];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
 
-function colourSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputcolourSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[3];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
+<h2>Book a car by Id<h2>
 
-function seatsSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputseatsSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[4];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
-
-function locationSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputlocationSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[5];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
-
-function costSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputcostSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[6];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
-
-function bookedSearch() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInputbookedSearch");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("TR");
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("TD")[7];
-        if (td) {
-	    txtValue = td.textContent || td.innerText;
-	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-	    }
-        }
-    }
-}
-</script>
-
+<form action="{{ url_for('carBooking') }}" method="post" autocomplete="off">
+	
+	<input type="text" name="bookingCarId" placeholder="Search by car id" id="bookingCarId">
+	<input type="text" name="bookingCarDays" placeholder="Amount of days" id="bookingCarDays">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
 
 {% endblock %}
+
+
+
+
+
+
