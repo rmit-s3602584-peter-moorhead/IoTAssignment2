@@ -13,4 +13,4 @@ pip3 install flask-mysqldb
 pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 export FLASK_APP=IoTAssignment2
 pip install -e .
-flask run
+flask run --host=0.0.0.0:5000
