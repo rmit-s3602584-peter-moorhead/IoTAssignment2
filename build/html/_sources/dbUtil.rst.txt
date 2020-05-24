@@ -1,7 +1,7 @@
-main module
-===========
+dbUtil module
+=============
 
-.. automodule:: main
+.. automodule:: dbUtil
     :members:
     :undoc-members:
     :show-inheritance:
