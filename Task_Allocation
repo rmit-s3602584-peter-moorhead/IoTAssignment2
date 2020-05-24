@@ -1,0 +1,52 @@
+An option to register a new user on MP. The username, password and other
+necessary details (first name, last name and email) must be stored on cloud database. (Peter)
+
+The password must be stored in an encrypted (you may hash and salt) format. (Tim)
+
+An option to login into the system and gain access to the application on MP. (Peter)
+
+Develop and implement a robust input validation scheme. (Peter, Tim)
+
+Design database based on the requirements. (Joel, Peter)
+
+Create your own RESTful API to talk to the cloud database. (Peter)
+
+Once MP receives the login information, the system should display a menu
+which will allow the user to access the booking system:
+- view the history of my booked cars (Joel, Peter)
+- show all the available cars (Peter)
+- search a car (Peter)
+- book a car (Peter)
+- cancel a booking (Peter)
+- logout (Peter)
+
+Complete documentation using Sphinx (Peter, Joel)
+
+ Professional use of
+• GitHub from day 1 of the development
+• Trello board for the development cycle (Peter, Tim, Taylor, Joel)
+
+Implement Console-based system on AP, providing the functionality for user to
+unlock and return the car. (Taylor)
+
+ Sending user’s credential from AP to MP via sockets. The message needs to
+include some important information, such as current date and time, username/password, car
+ID. (Taylor)
+
+ MP needs to check the credential from AP and also send back the response
+message via sockets. If the credential is correct, MP need to modify related information
+about the car in cloud database. (Taylor)
+
+Show all the car’s location by using Google Map API on MP. You can use
+dummy location data. (Tim)
+
+Complete documentation using Sphinx, Trello board and Git Hub for this part (Taylor, Tim)
+
+Implement the facial recognition requirement of the system using OpenCV.
+This applies to the customers who want to use facial recognition authentication instead of
+console-based authentication to unlock the car. (Taylor)
+
+Complete documentation using Sphinx, Trello board and Git Hub for this part. (Taylor, Joel)
+
+ Complete unit test suite for the whole project (i.e., A, B, C and D parts). This
+is where you can decide what kind of unit tests are required. (Peter, Tim)
