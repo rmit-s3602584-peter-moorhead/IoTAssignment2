@@ -69,7 +69,7 @@ def login():
         account = cursor.fetchone()
         # If account exists in accounts table in out database
         if account:
-            # Create session data, we can access this data in other routes
+            # Create session data, can access this in other routes
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
@@ -83,7 +83,6 @@ def login():
         
     return render_template('index.html', msg=msg)
 
-# http://localhost:5000/python/logout - this will be the logout page
 @app.route('/logout')
 def logout():
     """
@@ -98,7 +97,6 @@ def logout():
     # Redirect to login page
     return redirect(url_for('login'))
 
-# http://localhost:5000/pythinlogin/register - this will be the registration page, we need to use both GET and POST requests
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """
@@ -129,7 +127,7 @@ def register():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
         account = cursor.fetchone()
-        # If account exists show error and validation checks
+        # If account exists show error and validation checks, got re from online sources
         if account:
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
@@ -145,12 +143,11 @@ def register():
             msg = 'You have successfully registered!'
             return redirect(url_for('login'))
     elif request.method == 'POST':
-        # Form is empty... (no POST data)
+        # Form is empty
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
-# http://localhost:5000/pythinlogin/home - this will be the home page, only accessible for loggedin users
 @app.route('/home')
 def home():
     """
