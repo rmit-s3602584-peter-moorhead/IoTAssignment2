@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block title %}Cars{% endblock %}
+
+
+{% block content %}
+<h2>Car Search</h2>
+<p>This is where you can search and book cars.</p>
+
+<form action="{{ url_for('carQuery') }}" method="post" autocomplete="off">
+	<input type="text" name="idCar" placeholder="Seach by id" id="idCar">
+	<input type="text" name="make" placeholder="Seach by make" id="make">
+	<input type="text" name="bodyType" placeholder="Seach by body type" id="bodyType">
+	<input type="text" name="colour" placeholder="Seach by colour" id="colour">
+	<input type="text" name="seats" placeholder="Seach by number of seats" id="seats">
+	<input type="text" name="location" placeholder="Seach by location" id="location">
+	<input type="text" name="cost" placeholder="Seach by cost per day" id="cost">
+	<input type="text" name="bookedBy" placeholder="Seach by user booked" id="bookedBy">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
+<table id="myTable">
+<TR>
+	<TH>Id</TH>
+	<TH>Make</TH>
+	<TH>Body Type</TH>
+	<TH>Colour</TH>
+	<TH>Seats</TH>
+	<TH>Location</TH>
+	<TH>Cost</TH>
+	<TH>BookedBy</TH>
+	<TH>LongLat</TH>
+	<TH>Returned</TH>
+</TR>
+
+{% for row in cars %}
+<TR>
+	<TD>{{row.id}}</TD>
+	<TD>{{row.make}}</TD>
+	<TD>{{row.bodyType}}</TD>
+	<TD>{{row.colour}}</TD>
+	<TD>{{row.seats}}</TD>
+	<TD>{{row.location}}</TD>
+	<TD>{{row.cost}}</TD>
+	<TD>{{row.bookedBy}}</TD>
+	<TD>{{row.longlat}}</TD>
+	<TD>{{row.returned}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+<!--Google maps API -->
+{% set url_string = "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=10&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C" + my_string + "&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY" %}
+
+<p>
+<img src= {{url_string}}>
+</p>
+
+
+<h2>Book a car by Id<h2>
+
+<form action="{{ url_for('carBooking') }}" method="post" autocomplete="off">
+	
+	<input type="text" name="bookingCarId" placeholder="Search by car id" id="bookingCarId">
+	<input type="text" name="bookingCarDays" placeholder="Amount of days" id="bookingCarDays">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
+{% endblock %}
+
+
+
+
+
+
