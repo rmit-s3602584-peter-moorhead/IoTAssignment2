@@ -12,7 +12,7 @@
 
 # Command with correct pathing to reinitialize html files
 # When building source directory with new rst files FORMAT: sphinx-apidoc -o [OUTPUT_PATH][MODULE_PATH]
-# sphinx-apidoc -o . ..
+# sphinx-apidoc -o source .
 # make clean
 # make html
 
@@ -25,7 +25,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('../IoTAssignment2'))
 
 # Add pathing if your code is in a different folder from the root directory
 # sys.path.append('filename')
