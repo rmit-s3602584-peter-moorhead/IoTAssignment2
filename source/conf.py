@@ -26,6 +26,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
+sys.path.append('/')
 #sys.path.insert(0, os.path.abspath('../IoTAssignment2'))
 
 # Add pathing if your code is in a different folder from the root directory
@@ -78,7 +79,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store','source/IoTAssignment2.agentClient.rst','source/IoTAssignment2.agentServer.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
@@ -189,3 +190,8 @@ epub_exclude_files = ['search.html']
 
 
 # -- Extension configuration -------------------------------------------------
+#Fix for missing files 
+numpydoc_show_class_members = True
+class_members_toctree = False
+# Mock Imports
+autodoc_mock_imports = ['cv2','face_recognition']

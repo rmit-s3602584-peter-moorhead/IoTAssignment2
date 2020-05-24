@@ -1,4 +1,4 @@
-from main import app
+from IoTAssignment2.api import app
 import unittest
 
 
@@ -99,7 +99,7 @@ class FlaskTestCase(unittest.TestCase):
             data=dict(idCar="9"),
             follow_redirects=True
         )
-
+        response = tester.get('/cars', follow_redirects=True)
         self.assertIn(b'Honda', response.data)
     
     

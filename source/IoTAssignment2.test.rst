@@ -1,7 +1,0 @@
-IoTAssignment2.test module
-==========================
-
-.. automodule:: IoTAssignment2.test
-    :members:
-    :undoc-members:
-    :show-inheritance:
