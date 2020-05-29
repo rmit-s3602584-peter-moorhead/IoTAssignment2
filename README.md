@@ -20,5 +20,5 @@ python3 -m venv venv
 (venv) pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 (venv) export FLASK_APP=IoTAssignment2
 (venv) pip install -e .
-(venv) flask run --host=0.0.0.0:5000
+(venv) flask run --host=0.0.0.0
 ```
