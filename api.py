@@ -75,6 +75,7 @@ def login():
             session['username'] = account['username']
             session['typeOfUser'] = account['typeOfUser']
             session['firstName'] = account['firstName']
+            session['typeOfUser'] = account['typeOfUser']
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -117,7 +118,9 @@ def register():
         firstName = request.form['firstName']
         lastName = request.form['lastName']
         email = request.form['email']
-        customer = "Customer"
+        customer = "Manager"
+        accessToken = ''
+        MAC = ''
         # Generates a Salt and Hashes the Password with sha256
         salt = "lcyysk2NAQOJCHxkM1fA"
         saltPass = password+salt
@@ -138,7 +141,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,))
+            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
             return redirect(url_for('login'))
@@ -166,13 +169,16 @@ def home():
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                 cursor.execute('SELECT * FROM bookings WHERE userid = %s', (userid,))
                 history = cursor.fetchall()
-                
-
-                return render_template('home.html', history=history, username=session['username'])
+                mysql.connection.commit()
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('SELECT * FROM bookings')
+                allHistory = cursor.fetchall()
+                mysql.connection.commit()
+                return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], history=history, username=session['username'])
             else:
                 return render_template('cars.html')
             
-            return render_template('home.html', username=session['username'])
+            return render_template('home.html', typeOfUser=session['typeOfUser'], username=session['username'])
         #else:
             #return render_template('adminHome.html', username=session['username'])
     # User is not loggedin redirect to login page
@@ -191,7 +197,7 @@ def profile():
         cursor.execute('SELECT * FROM users WHERE id = %s', (session['id'],))
         user = cursor.fetchone()
         # Show the profile page with account info
-        return render_template('profile.html', user=user)
+        return render_template('profile.html', typeOfUser=session['typeOfUser'], user=user)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -216,7 +222,7 @@ def cars():
 
         print(my_string)
         # Show the profile page with account info
-        return render_template('cars.html', cars=cars, my_string=my_string)
+        return render_template('cars.html', cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string)
     
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -234,7 +240,7 @@ def carManagement():
         if session['typeOfUser'] == 'Customer':
             return redirect(url_for('login'))
         else:
-            return render_template('carManagement.html')
+            return render_template('carManagement.html', typeOfUser=session['typeOfUser'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -435,7 +441,7 @@ def carQuery():
 
                 print(my_string)
                 # Show the profile page with account info
-                return render_template('cars.html', cars=cars, my_string=my_string)
+                return render_template('cars.html', cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string)
                             
             
         
@@ -524,20 +530,8 @@ def carBooking():
 
                     print(my_string)
                     # Show the profile page with account info
-                    return render_template('cars.html', cars=cars, my_string=my_string)
+                    return render_template('cars.html', cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string)
 
-                    #my_string = ""
-
-                    #for row in cars:
-                    #    my_string = my_string + row['longlat'] + '|'
-                    #print(my_string)
-
-                    
-                    # Show the profile page with account info
-                    #return render_template('cars.html', cars=cars, my_string=my_string)
-
-                    #return redirect(url_for('cars'))
-                    #return render_template('cars.html')
                 else:
                     print(cars)
                     return redirect(url_for('cars'))
@@ -546,7 +540,7 @@ def carBooking():
                 print('fdfhjdjhdfjhdfk')
                 return redirect(url_for('cars'))
         else:
-            return render_template('profile.html')
+            return render_template('profile.html', typeOfUser=session['typeOfUser'])
         
     else:
         return redirect(url_for('login'))
@@ -625,7 +619,7 @@ def cancelBooking():
                     history = cursor.fetchall()
                     mysql.connection.commit()
                     
-                    return render_template('home.html', username=username, history=history)
+                    return render_template('home.html', typeOfUser=session['typeOfUser'], username=username, history=history)
 
                
                 
@@ -636,7 +630,7 @@ def cancelBooking():
                 history = cursor.fetchall()
                 mysql.connection.commit()
 
-                return render_template('home.html', username=username, history=history)
+                return render_template('home.html', typeOfUser=session['typeOfUser'], username=username, history=history)
         else:
             return render_template('profile.html')
         
@@ -656,11 +650,439 @@ def userhistory():
             cursor.execute('SELECT * FROM bookings WHERE userid = %d', (id,))
             history = cursor.fetchall()
             
-            return render_template('userhistory.html', history=history)
+            return render_template('userhistory.html', typeOfUser=session['typeOfUser'], history=history)
         else:
             return render_template('cars.html')
     else:
         return redirect(url_for('login'))
+    
+    
+@app.route('/searchDatabase', methods=['GET', 'POST'])
+def searchDatabase():
+    """
+    This function will render the template for the cars available to
+    hire. It also you can also search for available cars based on
+    their attributes via a POST form in carQuery.
+    """
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # We need all the account info for the user so we can display it on the profile page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM cars')
+        cars = cursor.fetchall()
+        mysql.connection.commit()
+        
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM users')
+        users = cursor.fetchall()
+        mysql.connection.commit()
+
+        my_string = ""
+        cout = 0 
+        for row in cars:
+            my_string = my_string + row['longlat'] + '|'
+
+        print(my_string)
+        # Show the profile page with account info
+        return render_template('searchDatabase.html', users=users, cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string)
+    
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/adminCarQuery', methods=['POST'])
+def adminCarQuery():
+    """
+    This function takes the data from a form and builds an sql query based
+    on what variation of attribute user was looking for.
+    If the form is blank it returns all the cars available like the cars route.
+    It is probably susceptible to an SQL injection at the moment but will
+    hopefully in the future provide a more robust input validation scheme.
+    """
+    #return render_template('searchDatabase.html')
+    if 'loggedin' in session:
+        
+        if request.method == 'GET':
+            
+            idCar = request.form['id']
+            cursor.execute('SELECT * FROM cars')
+            cars = cursor.fetchone()
+            #print(cars)
+            #return render_template('cars.html', cars=cars)
+            return render_template('home.html')
+        else:
+
+            idcar = request.form['idCar']
+            make = request.form['make']
+            bodyType = request.form['bodyType']
+            colour = request.form['colour']
+            seats = request.form['seats']
+            location = request.form['location']
+            cost = request.form['cost']
+            #bookedBy = 'Cathy'
+            bookedBy = request.form['bookedBy']
+            returned = 0
+
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars')
+            carData = cursor.fetchall()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE id = %s', (idcar,))
+            carIdData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE make = %s', (make,))
+            carMakeData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE bodyType = %s', (bodyType,))
+            carBodyTypeData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE colour = %s', (colour,))
+            carColourData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE seats = %s', (seats,))
+            carSeatsData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE location = %s', (location,))
+            carLocationData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE cost = %s', (cost,))
+            carCostData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE bookedBy = %s', (bookedBy,))
+            carBookedByData = cursor.fetchone()
+            mysql.connection.commit()
+            
+            
+
+            print(type(carData))
+            
+            
+            sqlExpression = 'SELECT * FROM cars'
+            count = 0
+            
+            if idcar == '' and make == '' and bodyType == '' and colour == '' and seats == '' and location == '' and cost == '' and bookedBy == '':
+                return redirect(url_for('searchDatabase'))
+            else:
+                sqlExpression = 'SELECT * FROM cars WHERE '
+                if idcar != '':
+                    if carIdData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' id = ' + idcar 
+                        else:
+                            sqlExpression = sqlExpression + ' id = ' + idcar
+                            count = 1
+                            print(count)
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                if make != '':
+                    if carMakeData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' make = ' + '"' + make + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' make = ' + '"' + make + '"'
+                            count += 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                    
+                if bodyType != '':
+                    if carBodyTypeData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' bodyType = ' + '"' + bodyType + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' bodyType = ' + '"' + bodyType + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                       return redirect(url_for('searchDatabase'))
+                        
+                if colour != '':
+                    if carColourData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' colour = ' + '"' + colour + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' colour = ' + '"' + colour + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if seats != '':
+                    if carSeatsData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' seats = ' + '"' + seats + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' seats = ' + '"' + seats + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if location != '':
+                    if carLocationData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' location = ' + '"' + location + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' location = ' + '"' + location + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if cost != '':
+                   if carCostData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' cost = ' + '"' + cost + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' cost = ' + '"' + cost + '"'
+                            count = 1
+                            app.logger.info(count)
+                   else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if bookedBy != '':
+                    if carBookedByData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' bookedBy = ' + '"' + bookedBy + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' bookedBy = ' + '"' + bookedBy + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                print (carMakeData)
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*!!!!!!!!!!!!!!!!!!!!") 
+                app.logger.info(sqlExpression)
+                
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute(sqlExpression)
+
+                #cursor.execute('SELECT * FROM cars WHERE  bodyType = "Sedan"')
+
+                #return redirect(url_for('cars'))
+                cars = cursor.fetchall()
+                # Show the profile page with account info
+                my_string = ""
+                cout = 0 
+                for row in cars:
+                    my_string = my_string + row['longlat'] + '|'
+
+                print(my_string)
+                # Show the profile page with account info
+                return render_template('searchDatabase.html', cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string)
+                            
+            
+        
+    return redirect(url_for('login'))
+
+
+@app.route('/adminUserQuery', methods=['POST'])
+def adminUserQuery():
+    """
+    This function takes the data from a form and builds an sql query based
+    on what variation of attribute user was looking for.
+    If the form is blank it returns all the cars available like the cars route.
+    It is probably susceptible to an SQL injection at the moment but will
+    hopefully in the future provide a more robust input validation scheme.
+    """
+    #return render_template('searchDatabase.html')
+    if 'loggedin' in session:
+        
+        if request.method == 'GET':
+            
+            idCar = request.form['id']
+            cursor.execute('SELECT * FROM users')
+            cars = cursor.fetchone()
+            #print(cars)
+            #return render_template('cars.html', cars=cars)
+            return render_template('home.html')
+        else:
+
+            idUser = request.form['idUser']
+            username = request.form['username']
+            password = request.form['password']
+            firstName = request.form['firstName']
+            lastName = request.form['lastName']
+            email = request.form['email']
+            typeOfUser = request.form['typeOfUser']
+
+            returned = 0
+
+            
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users')
+            userData = cursor.fetchall()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE id = %s', (idUser,))
+            idUserData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+            usernameData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE password = %s', (password,))
+            passwordData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE firstName = %s', (firstName,))
+            firstNameData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE lastName = %s', (lastName,))
+            lastNameData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
+            emailData = cursor.fetchone()
+            mysql.connection.commit()
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE typeOfUser = %s', (typeOfUser,))
+            typeOfUserData = cursor.fetchone()
+            mysql.connection.commit()
+
+            
+
+            print(type(userData))
+            
+            
+            sqlExpression = 'SELECT * FROM users'
+            count = 0
+            
+            if idUser == '' and username == '' and password == '' and firstName == '' and lastName == '' and email == '' and typeOfUser == '':
+                return redirect(url_for('searchDatabase'))
+            else:
+                sqlExpression = 'SELECT * FROM users WHERE '
+                if idUser != '':
+                    if idUserData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' id = ' + idUser 
+                        else:
+                            sqlExpression = sqlExpression + ' id = ' + idUser
+                            count = 1
+                            print(count)
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                if username != '':
+                    if usernameData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' username = ' + '"' + username + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' username = ' + '"' + username + '"'
+                            count += 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                    
+                if password != '':
+                    if passwordData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' password = ' + '"' + password + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' password = ' + '"' + password + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                       return redirect(url_for('searchDatabase'))
+                        
+                if firstName != '':
+                    if firstNameData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' firstName = ' + '"' + firstName + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' firstName = ' + '"' + firstName + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if lastName != '':
+                    if lastNameData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' lastName = ' + '"' + lastName + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' lastName = ' + '"' + lastName + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if email != '':
+                    if emailData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' email = ' + '"' + email + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' email = ' + '"' + email + '"'
+                            count = 1
+                            app.logger.info(count)
+                    else:
+                        return redirect(url_for('searchDatabase'))
+                        
+                if typeOfUser != '':
+                   if typeOfUserData != None:
+                        if count != 0:
+                            sqlExpression = sqlExpression + ' AND ' + ' typeOfUser = ' + '"' + typeOfUser + '"'
+                        else:
+                            sqlExpression = sqlExpression + ' typeOfUser = ' + '"' + typeOfUser + '"'
+                            count = 1
+                            app.logger.info(count)
+                   else:
+                        return redirect(url_for('searchDatabase'))
+
+                #print (carMakeData)
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*!!!!!!!!!!!!!!!!!!!!") 
+                app.logger.info(sqlExpression)
+                
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute(sqlExpression)
+
+                #cursor.execute('SELECT * FROM cars WHERE  bodyType = "Sedan"')
+
+                #return redirect(url_for('cars'))
+                users = cursor.fetchall()
+                # Show the profile page with account info
+                #my_string = ""
+                #cout = 0 
+                #for row in cars:
+                #    my_string = my_string + row['longlat'] + '|'
+
+                #print(my_string)
+                # Show the profile page with account info
+                return render_template('searchDatabase.html', users=users, typeOfUser=session['typeOfUser'])
+                            
+            
+        
+    return redirect(url_for('login'))
+
+
+
+@app.route('/databaseUtilities', methods=['POST'])
+def databaseUtilities():
+    return
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']

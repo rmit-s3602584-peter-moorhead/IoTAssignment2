@@ -1,10 +1,18 @@
+{% if typeOfUser == 'Admin' %}
+{% extends 'adminLayout.html' %}
+{% elif typeOfUser == 'Engineer' %}
+{% extends 'engineerLayout.html' %}
+{% elif typeOfUser == 'Manager' %}
+{% extends 'managerLayout.html' %}
+{% else %}
 {% extends 'layout.html' %}
+{% endif %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
 <h2>Home page</h2>
 <p>Welcome, {{ username }}!</p>
-
+{% if typeOfUser == 'Customer' %}
 <h2>User History</h2>
 
 <table id="myTable">
@@ -37,6 +45,37 @@
 	<div class="msg">{{ msg }}</div>
 	<input type="submit" value="Submit Cancellation">
 </form>
+{% elif typeOfUser == 'Engineer' %}
+<h2>Engineer Page</h2>
 
+{% elif typeOfUser == 'Manager' %}
+<h2>Manager Page</h2>
+
+{% else %}
+<h2>User History</h2>
+
+<table id="myTable">
+<TR>
+    <TH>Booking Id</TH>
+    <TH>First Name</TH>
+    <TH>Date</TH>
+    <TH>Days Booked</TH>
+    <TH>Car Id</TH>
+    <TH>Status</TH>
+</TR>
+
+{% for row in allHistory %}
+<TR>
+    <TD>{{row.bookingId}}</TD>
+    <TD>{{row.firstName}}</TD>
+    <TD>{{row.date}}</TD>
+    <TD>{{row.daysBooked}}</TD>
+    <TD>{{row.carId}}</TD>
+    <TD>{{row.current}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+{% endif %}
 
 {% endblock %}
