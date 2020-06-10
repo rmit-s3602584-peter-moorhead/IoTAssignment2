@@ -660,12 +660,10 @@ def userhistory():
 @app.route('/searchDatabase', methods=['GET', 'POST'])
 def searchDatabase():
     """
-    This function will render the template for the cars available to
-    hire. It also you can also search for available cars based on
-    their attributes via a POST form in carQuery.
+    Displays users and cars tables for admin to query
     """
     # Check if user is loggedin
-    if 'loggedin' in session:
+    if session['typeOfUser'] == 'Admin':
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM cars')
@@ -693,13 +691,13 @@ def searchDatabase():
 def adminCarQuery():
     """
     This function takes the data from a form and builds an sql query based
-    on what variation of attribute user was looking for.
-    If the form is blank it returns all the cars available like the cars route.
+    on what variation of attribute admin was looking for.
+    querying users and cars table for admins
     It is probably susceptible to an SQL injection at the moment but will
     hopefully in the future provide a more robust input validation scheme.
     """
     #return render_template('searchDatabase.html')
-    if 'loggedin' in session:
+    if session['typeOfUser'] == 'Admin':
         
         if request.method == 'GET':
             
@@ -897,12 +895,10 @@ def adminUserQuery():
     """
     This function takes the data from a form and builds an sql query based
     on what variation of attribute user was looking for.
-    If the form is blank it returns all the cars available like the cars route.
-    It is probably susceptible to an SQL injection at the moment but will
-    hopefully in the future provide a more robust input validation scheme.
+    If the form is blank it returns all the users available like the users route.
     """
     #return render_template('searchDatabase.html')
-    if 'loggedin' in session:
+    if session['typeOfUser'] == 'Admin':
         
         if request.method == 'GET':
             
@@ -1080,9 +1076,79 @@ def adminUserQuery():
 
 
 
-@app.route('/databaseUtilities', methods=['POST'])
-def databaseUtilities():
-    return
+@app.route('/editCar')
+def editCar():
+    if session['typeOfUser'] == 'Admin':
+        return render_template('editCar.html')
+    else:
+        return redirect(url_for('login'))
+                 
+@app.route('/addCar', methods=['GET', 'POST'])
+def addCar():
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+            addmake = request.form['addmake']
+            addbodyType = request.form['addbodyType']
+            addcolour = request.form['addcolour']
+            addseats = request.form['addseats']
+            addlocation = request.form['addlocation']
+            addcost = request.form['addcost']
+            addbookedby = ''
+            addlonglat = ''
+            addreturned = ''
+            addbroken = ''
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('INSERT INTO cars VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (addmake, addbodyType, addcolour, addseats, addlocation, addcost, addbookedby, addlonglat, addreturned, addbroken))
+            #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
+            
+            mysql.connection.commit()
+            return render_template('editCar.html')
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
+
+
+@app.route('/updateCar')
+def updateCar():
+    pass
+
+
+@app.route('/deleteCar', methods=['GET', 'POST'])
+def deleteCar():
+
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+
+            deleteCarId = request.form['deleteid']
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars WHERE id = %s', (deleteCarId,))
+            deleteCarData = cursor.fetchone()
+            mysql.connection.commit()
+
+            if deleteCarData != None:
+                
+                    deleteCar = deleteCarData['id']
+                       
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('DELETE FROM cars WHERE id = %s', (deleteCar,))
+                    mysql.connection.commit()
+                              
+                    return render_template('editCar.html')
+                
+            else:
+                return render_template('editCar.html')
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login'))    
+
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
