@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from IoTAssignment2 import pushBullet
 #from cal_setup import get_calendar_service
 import MySQLdb.cursors
 import re
@@ -13,6 +14,8 @@ import sys
 import hashlib
 import pickle
 import os.path
+#import bluetooth
+import json
 
 # Didn't work without secret key, didn't matter what it is
 app.secret_key = 'your secret key'
@@ -1075,6 +1078,24 @@ def adminUserQuery():
     return redirect(url_for('login'))
 
 
+@app.route('/reportCar', methods=['GET', 'POST'])
+def reportCar():
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+            idReport = request.form['idReport']
+            broken = 'ISSUE'
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('UPDATE cars SET broken = %s WHERE id = %s', (broken, idReport,))
+            pushBullet.pushBullet()  
+            mysql.connection.commit()
+            return redirect(url_for('searchDatabase'))
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
 
 @app.route('/editCar')
 def editCar():
