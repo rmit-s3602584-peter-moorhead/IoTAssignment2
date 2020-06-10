@@ -1150,6 +1150,79 @@ def deleteCar():
         return redirect(url_for('login'))    
 
 
+@app.route('/editUser')
+def editUser():
+    if session['typeOfUser'] == 'Admin':
+        return render_template('editUser.html')
+    else:
+        return redirect(url_for('login'))
+                 
+@app.route('/addUser', methods=['GET', 'POST'])
+def addUser():
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+            addusername = request.form['addusername']
+            addpassword = request.form['addpassword']
+            addfirstName = request.form['addfirstName']
+            addlastName = request.form['addlastName']
+            addemail = request.form['addemail']
+            addtypeofuser = request.form['addtypeofuser']
+            addaccesstoken = ''
+            mac = ''
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, addpassword, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
+            #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
+            
+            mysql.connection.commit()
+            return render_template('editUser.html')
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
+
+
+@app.route('/updateUser')
+def updateUser():
+    pass
+
+
+@app.route('/deleteUser', methods=['GET', 'POST'])
+def deleteUser():
+
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+
+            deleteUserId = request.form['deleteUid']
+
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users WHERE id = %s', (deleteUserId,))
+            deleteUserData = cursor.fetchone()
+            mysql.connection.commit()
+
+            if deleteUserData != None:
+                
+                    deleteUser = deleteUserData['id']
+                       
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('DELETE FROM users WHERE id = %s', (deleteUser,))
+                    mysql.connection.commit()
+                              
+                    return render_template('editUser.html')
+                
+            else:
+                return render_template('editUser.html')
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login'))    
+
+
+
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
