@@ -1,0 +1,44 @@
+{% extends 'adminLayout.html' %}
+
+{% block title %}Edit Cars{% endblock %}
+
+
+{% block content %}
+<h2>Car Edit</h2>
+<p>This is where you add, update and delete cars.</p>
+
+<form action="{{ url_for('addCar') }}" method="post" autocomplete="off">
+	<input type="text" name="addmake" placeholder="Add make" id="addmake" required>
+	<input type="text" name="addbodyType" placeholder="Add body type" id="addbodyType" required>
+	<input type="text" name="addcolour" placeholder="Add colour" id="addcolour" required>
+	<input type="text" name="addseats" placeholder="Add number of seats" id="addseats" required>
+	<input type="text" name="addlocation" placeholder="Add location" id="addlocation" required>
+	<input type="text" name="addcost" placeholder="Add cost per day" id="addcost" required>
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
+<form action="{{ url_for('updateCar') }}" method="post" autocomplete="off">
+	<input type="text" name="updatemake" placeholder="Update make" id="updatemake">
+	<input type="text" name="updatebodyType" placeholder="Update body type" id="updatebodyType">
+	<input type="text" name="updatecolour" placeholder="Update colour" id="updatecolour">
+	<input type="text" name="updateseats" placeholder="Update number of seats" id="updateseats">
+	<input type="text" name="updatelocation" placeholder="Update location" id="updatelocation">
+	<input type="text" name="updatecost" placeholder="Update cost per day" id="updatecost">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Update">
+</form>
+
+<form action="{{ url_for('deleteCar') }}" method="post" autocomplete="off">
+	<input type="text" name="deleteid" placeholder="Delete car by id" id="deleteid">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Delete">
+</form>
+
+{% endblock %}
+
+
+
+
+
+
