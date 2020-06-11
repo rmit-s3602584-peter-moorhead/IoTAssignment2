@@ -9,12 +9,9 @@
 	<body class="loggedin">
 		<nav class="navtop">
 			<div>
-				<h1>Admin Page</h1>
+				<h1>Manager Page</h1>
                 		<a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
-				<a href="{{ url_for('searchDatabase') }}"><i class="fas fa-home"></i>User/Car Search</a>
-				<a href="{{ url_for('editCar') }}"><i class="fas fa-cog"></i>Edit cars</a>
-				<a href="{{ url_for('editUser') }}"><i class="fas fa-cog"></i>Edit users</a>
-				<a href="{{ url_for('cars') }}"><i class="fas fa-car"></i>CustomerCarSearch</a>
+				<a href="{{ url_for('cars') }}"><i class="fas fa-car"></i>CarSearch</a>
 				<a href="{{ url_for('carManagement') }}"><i class="fas fa-tasks"></i>CarManagement</a>
 				<a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
 				<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
@@ -22,6 +19,8 @@
 		</nav>
 		<div class="content">
 			{% block content %}{% endblock %}
+<p>manager</p>
+
 		</div>
 	</body>
 </html>
