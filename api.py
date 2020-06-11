@@ -1191,9 +1191,14 @@ def addUser():
             addtypeofuser = request.form['addtypeofuser']
             addaccesstoken = ''
             mac = ''
+            # generates a Salt and Hashes the Password with sha256
+            salt = "lcyysk2NAQOJCHxkM1fA"
+            saltPass = addpassword+salt
+            hashPass = hashlib.sha256(saltPass.encode())
+            encryptPass = hashPass.hexdigest()
 
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, addpassword, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
+            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, encryptPass, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
             #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
             
             mysql.connection.commit()
@@ -1205,9 +1210,12 @@ def addUser():
         return redirect(url_for('login')) 
 
 
-@app.route('/updateUser')
+@app.route('/updateUser', methods=['GET', 'POST'])
 def updateUser():
+
     pass
+
+            
 
 
 @app.route('/deleteUser', methods=['GET', 'POST'])
