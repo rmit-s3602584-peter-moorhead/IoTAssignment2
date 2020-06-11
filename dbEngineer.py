@@ -15,19 +15,29 @@ def engineer():
     if(connection == None):
         connection = MySQLdb.connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB)
     
-    def updater():
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #def updater():
         while True: 
             cursor = connection.cursor(MySQLdb.cursors.DictCursor)
             user = "3"
-            #token = "o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
-            token = "hellohel"
-            mac = "pur"
+            token = "o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
+            #token = "hellohel"
+            #mac = "pur"
             cursor.execute('UPDATE users SET accessToken=%s WHERE id=%s', (token, user))
             connection.commit()
             #mac = "14:9F:3C:76:B6:04"
-            cursor.execute('UPDATE users SET MAC=%s WHERE id=%s', (mac, user))
+            #cursor.execute('UPDATE users SET MAC=%s WHERE id=%s', (mac, user))
             
-            connection.commit()
+            #connection.commit()
             
             cursor.execute('SELECT * FROM users')
             print(cursor.fetchall())
@@ -60,6 +70,5 @@ def engineer():
             
     
     
-    
-    
+engineer()
 
