@@ -56,10 +56,8 @@
 	<TH>Colour</TH>
 	<TH>Seats</TH>
 	<TH>Location</TH>
-	<TH>Cost</TH>
-	<TH>BookedBy</TH>
 	<TH>LongLat</TH>
-	<TH>Returned</TH>
+	<TH>Broken</TH>
 </TR>
 
 {% for row in broken %}
@@ -70,10 +68,7 @@
 	<TD>{{row.colour}}</TD>
 	<TD>{{row.seats}}</TD>
 	<TD>{{row.location}}</TD>
-	<TD>{{row.cost}}</TD>
-	<TD>{{row.bookedBy}}</TD>
 	<TD>{{row.longlat}}</TD>
-	<TD>{{row.returned}}</TD>
 	<TD>{{row.broken}}</TD>
 </TR>
 {% endfor %}

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from IoTAssignment2 import pushBullet
+#from IoTAssignment2 import pushBullet
 #from cal_setup import get_calendar_service
 import MySQLdb.cursors
 import re
@@ -1103,7 +1103,7 @@ def reportCar():
 
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET broken = %s WHERE id = %s', (broken, idReport,))
-            pushBullet.pushBullet()  
+            #pushBullet.pushBullet()  
             mysql.connection.commit()
             return redirect(url_for('searchDatabase'))
         else:
