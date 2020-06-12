@@ -2,7 +2,7 @@ import MySQLdb.cursors
 import hashlib
 
 
-def engineer():
+class engineer():
     
     #Database connection
     MYSQL_HOST = "35.244.72.137"
@@ -25,19 +25,19 @@ def engineer():
     
     
     
-    #def updater():
+    def updater():
         while True: 
             cursor = connection.cursor(MySQLdb.cursors.DictCursor)
-            user = "3"
-            token = "o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
+            user = "9"
+            #token = "o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
             #token = "hellohel"
             #mac = "pur"
-            cursor.execute('UPDATE users SET accessToken=%s WHERE id=%s', (token, user))
+            #cursor.execute('UPDATE users SET accessToken=%s WHERE id=%s', (token, user))
             connection.commit()
-            #mac = "14:9F:3C:76:B6:04"
-            #cursor.execute('UPDATE users SET MAC=%s WHERE id=%s', (mac, user))
+            mac = "14:9F:3C:76:B6:04"
+            cursor.execute('UPDATE users SET MAC=%s WHERE id=%s', (mac, user))
             
-            #connection.commit()
+            connection.commit()
             
             cursor.execute('SELECT * FROM users')
             print(cursor.fetchall())
@@ -48,12 +48,14 @@ def engineer():
         carID = "3"
         state = "Working"
         cursor.execute('UPDATE cars SET broken=%s WHERE id=%s', (state, carID))
+        connection.commit()
     
     def unlockCars():
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         carStr = "Repairing"
         carID = "3"
         cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
+        connection.commit()
         
         
     def matchMac(mac):
@@ -67,6 +69,7 @@ def engineer():
             return True
         else:
             print("No matching MAC Address")
+            return False
             
     
     
