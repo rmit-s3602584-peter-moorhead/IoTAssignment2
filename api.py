@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from IoTAssignment2 import pushBullet
+#from IoTAssignment2 import pushBullet
 #from cal_setup import get_calendar_service
 import MySQLdb.cursors
 import re
@@ -177,7 +177,22 @@ def home():
                 cursor.execute('SELECT * FROM bookings')
                 allHistory = cursor.fetchall()
                 mysql.connection.commit()
-                return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], history=history, username=session['username'])
+
+
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('SELECT * FROM cars WHERE broken = "ISSUE"')
+                broken = cursor.fetchall()
+                mysql.connection.commit()
+
+
+                my_string = ""
+                cout = 0 
+                for row in broken:
+                    my_string = my_string + row['longlat'] + '|'
+
+                print(my_string)
+
+                return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], history=history, username=session['username'], broken=broken, my_string=my_string)
             else:
                 return render_template('cars.html')
             
@@ -1088,7 +1103,7 @@ def reportCar():
 
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET broken = %s WHERE id = %s', (broken, idReport,))
-            pushBullet.pushBullet()  
+            #pushBullet.pushBullet()  
             mysql.connection.commit()
             return redirect(url_for('searchDatabase'))
         else:
@@ -1191,9 +1206,14 @@ def addUser():
             addtypeofuser = request.form['addtypeofuser']
             addaccesstoken = ''
             mac = ''
+            # generates a Salt and Hashes the Password with sha256
+            salt = "lcyysk2NAQOJCHxkM1fA"
+            saltPass = addpassword+salt
+            hashPass = hashlib.sha256(saltPass.encode())
+            encryptPass = hashPass.hexdigest()
 
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, addpassword, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
+            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, encryptPass, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
             #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
             
             mysql.connection.commit()
@@ -1205,9 +1225,12 @@ def addUser():
         return redirect(url_for('login')) 
 
 
-@app.route('/updateUser')
+@app.route('/updateUser', methods=['GET', 'POST'])
 def updateUser():
+
     pass
+
+            
 
 
 @app.route('/deleteUser', methods=['GET', 'POST'])

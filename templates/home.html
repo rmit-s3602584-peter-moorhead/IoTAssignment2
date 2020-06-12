@@ -48,6 +48,40 @@
 {% elif typeOfUser == 'Engineer' %}
 <h2>Engineer Page</h2>
 
+<table id="myTable">
+<TR>
+	<TH>Id</TH>
+	<TH>Make</TH>
+	<TH>Body Type</TH>
+	<TH>Colour</TH>
+	<TH>Seats</TH>
+	<TH>Location</TH>
+	<TH>LongLat</TH>
+	<TH>Broken</TH>
+</TR>
+
+{% for row in broken %}
+<TR>
+	<TD>{{row.id}}</TD>
+	<TD>{{row.make}}</TD>
+	<TD>{{row.bodyType}}</TD>
+	<TD>{{row.colour}}</TD>
+	<TD>{{row.seats}}</TD>
+	<TD>{{row.location}}</TD>
+	<TD>{{row.longlat}}</TD>
+	<TD>{{row.broken}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+<!--Google maps API -->
+{% set url_string = "https://maps.googleapis.com/maps/api/staticmap?center=Melbourne+Vic&zoom=10&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C" + my_string + "&key=AIzaSyBs9pmV28AcaehCCMtvuQuZ49VFNIOyyxY" %}
+
+<p>
+<img src= {{url_string}}>
+</p>
+
+
 {% elif typeOfUser == 'Manager' %}
 <h2>Manager Page</h2>
 
