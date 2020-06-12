@@ -177,7 +177,22 @@ def home():
                 cursor.execute('SELECT * FROM bookings')
                 allHistory = cursor.fetchall()
                 mysql.connection.commit()
-                return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], history=history, username=session['username'])
+
+
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('SELECT * FROM cars WHERE broken = "ISSUE"')
+                broken = cursor.fetchall()
+                mysql.connection.commit()
+
+
+                my_string = ""
+                cout = 0 
+                for row in broken:
+                    my_string = my_string + row['longlat'] + '|'
+
+                print(my_string)
+
+                return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], history=history, username=session['username'], broken=broken, my_string=my_string)
             else:
                 return render_template('cars.html')
             
