@@ -250,8 +250,7 @@ def cars():
 @app.route('/carManagement')
 def carManagement():
     """
-    An admin function that will let admin's perform database operations
-    that regular users should not be able to.
+    Legacy route
     """
     if 'loggedin' in session:
         # User is loggedin show them the home page
@@ -470,7 +469,9 @@ def carQuery():
 def carBooking():
     
     """
-    User will book a car by posting to the booking and car tables
+    User inputs car by id they want to book and number of days and the session variable
+    is parsed as well as the form data and creates an sql update in the database to
+    allocate that car to them and also creates a google calendar event for that user.
     """
     if 'loggedin' in session:
         if request.method == 'POST':
@@ -567,6 +568,12 @@ def carBooking():
 @app.route('/cancelBooking', methods=['GET', 'POST'])
 def cancelBooking():
 
+    """
+    User inputs the booking id that they want to cancel which is then updated in the
+    google sql database and also the google calender event gets cancelled
+    """
+
+
     if 'loggedin' in session:
         if request.method == 'POST':
             userid = session['id']
@@ -659,7 +666,7 @@ def cancelBooking():
 def userhistory():
     
     """
-    User will display history of bookings
+    Method to display history of bookings
     """
     if 'loggedin' in session:
         if request.method == 'POST':
@@ -709,10 +716,8 @@ def searchDatabase():
 def adminCarQuery():
     """
     This function takes the data from a form and builds an sql query based
-    on what variation of attribute admin was looking for.
-    querying users and cars table for admins
-    It is probably susceptible to an SQL injection at the moment but will
-    hopefully in the future provide a more robust input validation scheme.
+    on what variation of car attributes admin was looking for.
+    Querying users and cars table for admins
     """
     #return render_template('searchDatabase.html')
     if session['typeOfUser'] == 'Admin':
@@ -912,7 +917,7 @@ def adminCarQuery():
 def adminUserQuery():
     """
     This function takes the data from a form and builds an sql query based
-    on what variation of attribute user was looking for.
+    on what variation of user attributes admin was looking for.
     If the form is blank it returns all the users available like the users route.
     """
     #return render_template('searchDatabase.html')
@@ -1095,6 +1100,13 @@ def adminUserQuery():
 
 @app.route('/reportCar', methods=['GET', 'POST'])
 def reportCar():
+    
+    """
+    Admin uses this route to issue a notification for an engineer to fix the car by
+    updating the broken column on a car by filling out a form and sending the data
+    to the google database.
+    """
+    
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1114,6 +1126,11 @@ def reportCar():
 
 @app.route('/editCar')
 def editCar():
+    
+    """
+    default edit car page for the admin
+    """
+    
     if session['typeOfUser'] == 'Admin':
         return render_template('editCar.html')
     else:
@@ -1121,6 +1138,12 @@ def editCar():
                  
 @app.route('/addCar', methods=['GET', 'POST'])
 def addCar():
+    
+    """
+    Admin add car method to fill out a form that is then
+    inputted into the google database for further hire by users
+    """
+    
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1148,13 +1171,82 @@ def addCar():
         return redirect(url_for('login')) 
 
 
-@app.route('/updateCar')
+@app.route('/updateCar', methods=['GET', 'POST'])
 def updateCar():
-    pass
+    
+    """
+    Admin updates car values by way of form, specifies car id and uses that
+    to identify which car is being updated. Values left blank will not be updated
+    """
+    
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+            selectcarId = request.form['selectcarId']
+            updatemake = request.form['updatemake']
+            updatebodyType = request.form['updatebodyType']
+            updatecolour = request.form['updatecolour']
+            updateseats = request.form['updateseats']
+            updatelocation = request.form['updatelocation']
+            updatecost = request.form['updatecost']
+            updatebookedBy = ''
+            updatelonglat = ''
+            updatereturned = ''
+            updatebroken = ''
+
+            if selectcarId != '':
+                if updatemake != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET make = %s WHERE id = %s', (updatemake, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updatebodyType != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET bodyType = %s WHERE id = %s', (updatebodyType, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updatecolour != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET colour = %s WHERE id = %s', (updatecolour, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updateseats != '':
+                    if updateseats.isdigit() == True:
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('UPDATE cars SET seats = %s WHERE id = %s', (updateseats, selectcarId,))  
+                        mysql.connection.commit()
+                    else:
+                        print("note a number!!!! uwu")
+
+                if updatelocation != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET location = %s WHERE id = %s', (updatelocation, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updatecost != '':
+                    if updatecost.isdigit() == True:
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('UPDATE cars SET cost = %s WHERE id = %s', (updatecost, selectcarId,))  
+                        mysql.connection.commit()
+                    else:
+                        print("note a number!!!! uwu")
+
+                return render_template('editCar.html')
+
+
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
 
 
 @app.route('/deleteCar', methods=['GET', 'POST'])
 def deleteCar():
+
+    """
+    Admin specifies car id to delete which is removed from the databse.
+    """
 
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
@@ -1188,6 +1280,9 @@ def deleteCar():
 
 @app.route('/editUser')
 def editUser():
+    """
+    default edit user page for the admin
+    """
     if session['typeOfUser'] == 'Admin':
         return render_template('editUser.html')
     else:
@@ -1195,6 +1290,10 @@ def editUser():
                  
 @app.route('/addUser', methods=['GET', 'POST'])
 def addUser():
+    """
+    Admin add user method to fill out a form that is then
+    inputted into the google database for further use
+    """
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1212,10 +1311,15 @@ def addUser():
             hashPass = hashlib.sha256(saltPass.encode())
             encryptPass = hashPass.hexdigest()
 
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, encryptPass, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
-            #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
-            
+
+            if not re.match(r'[^@]+@[^@]+\.[^@]+', addemail):
+                msg = 'Invalid email address!'
+                print("bad--------------------------------------------------------------------")
+            else:
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, encryptPass, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
+                #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
+                
             mysql.connection.commit()
             return render_template('editUser.html')
         else:
@@ -1227,15 +1331,89 @@ def addUser():
 
 @app.route('/updateUser', methods=['GET', 'POST'])
 def updateUser():
+    """
+    Admin updates user values by way of form, specifies car id and uses that
+    to identify which user is being updated. Values left blank will not be updated
+    """
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
 
-    pass
+            #idReport = request.form['idReport']
+            #broken = 'ISSUE'
 
+            #cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            #cursor.execute('UPDATE cars SET broken = %s WHERE id = %s', (broken, idReport,))  
+            #mysql.connection.commit()
+            #return redirect(url_for('searchDatabase'))
+            selectId = request.form['selectId']
+            editusername = request.form['updateusername']
+            editpassword = request.form['updatepassword']
+            editfirstName = request.form['updatefirstName']
+            editlastName = request.form['updatelastName']
+            editemail = request.form['updateemail']
+            edittypeofuser = request.form['updatetypeofuser']
+            editaccesstoken = ''
+            mac = ''
+            # generates a Salt and Hashes the Password with sha256
+            salt = "lcyysk2NAQOJCHxkM1fA"
+            saltPass = editpassword+salt
+            hashPass = hashlib.sha256(saltPass.encode())
+            encryptPass = hashPass.hexdigest()
+
+
+            #This is probably wrong uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu
+            if selectId != '':
+                if editusername != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET username = %s WHERE id = %s', (editusername, selectId,))  
+                    mysql.connection.commit()
+                    
+                if editpassword != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET password = %s WHERE id = %s', (encryptPass, selectId,))  
+                    mysql.connection.commit()
+
+                if editfirstName != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET firstName = %s WHERE id = %s', (editfirstName, selectId,))  
+                    mysql.connection.commit()
+
+                if editlastName != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET lastName = %s WHERE id = %s', (editlastName, selectId,))  
+                    mysql.connection.commit()
+
+                if editemail != '':
+                    if not re.match(r'[^@]+@[^@]+\.[^@]+', editemail):
+                        msg = 'Invalid email address!'
+                        print("bad__________________________---------------------- uwu")
+                    else:
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('UPDATE users SET email = %s WHERE id = %s', (editemail, selectId,))  
+                        mysql.connection.commit()
+
+                if edittypeofuser != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    #don't know what this is called 
+                    cursor.execute('UPDATE users SET typeOfUser = %s WHERE id = %s', (edittypeofuser, selectId,))  
+                    mysql.connection.commit()
+
+                return render_template('editUser.html')
+                
+            
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
             
 
 
 @app.route('/deleteUser', methods=['GET', 'POST'])
 def deleteUser():
-
+    """
+    Admin specifies user id to delete which is removed from the databse.
+    """
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1264,6 +1442,38 @@ def deleteUser():
         
     else:
         return redirect(url_for('login'))    
+
+@app.route('/searchBooking', methods=['GET','POST'])
+def searchBooking():
+    """
+    This route lets an admin search through the booking history for a specific
+    cars bookings.
+    """
+    # Check if user is loggedin
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+        
+       
+            searchID=request.form['searchCarId']
+            if searchID != '':
+                if searchID.isdigit() == True:
+                    
+                    # We need all the account info for the user so we can display it on the profile page
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT * FROM bookings WHERE carId = %s', (searchID,))
+                    allHistory = cursor.fetchall()
+
+                    # Show the profile page with account info
+                    return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], username=session['username'])
+        
+                else:
+                    return redirect(url_for('home'))
+            else:
+                return redirect(url_for('home'))
+            
+            
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 

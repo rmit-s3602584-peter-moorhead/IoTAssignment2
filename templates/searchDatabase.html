@@ -29,6 +29,7 @@
 	<TH>BookedBy</TH>
 	<TH>LongLat</TH>
 	<TH>Returned</TH>
+	<TH>Broke?</TH>
 </TR>
 
 {% for row in cars %}
@@ -43,6 +44,7 @@
 	<TD>{{row.bookedBy}}</TD>
 	<TD>{{row.longlat}}</TD>
 	<TD>{{row.returned}}</TD>
+	<TD>{{row.broken}}</TD>
 </TR>
 {% endfor %}
 </table>
