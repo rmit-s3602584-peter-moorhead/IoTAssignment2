@@ -1148,9 +1148,68 @@ def addCar():
         return redirect(url_for('login')) 
 
 
-@app.route('/updateCar')
+@app.route('/updateCar', methods=['GET', 'POST'])
 def updateCar():
-    pass
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+
+            selectcarId = request.form['selectcarId']
+            updatemake = request.form['updatemake']
+            updatebodyType = request.form['updatebodyType']
+            updatecolour = request.form['updatecolour']
+            updateseats = request.form['updateseats']
+            updatelocation = request.form['updatelocation']
+            updatecost = request.form['updatecost']
+            updatebookedBy = ''
+            updatelonglat = ''
+            updatereturned = ''
+            updatebroken = ''
+
+            if selectcarId != '':
+                if updatemake != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET make = %s WHERE id = %s', (updatemake, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updatebodyType != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET bodyType = %s WHERE id = %s', (updatebodyType, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updatecolour != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET colour = %s WHERE id = %s', (updatecolour, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updateseats != '':
+                    if updateseats.isdigit() == True:
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('UPDATE cars SET seats = %s WHERE id = %s', (updateseats, selectcarId,))  
+                        mysql.connection.commit()
+                    else:
+                        print("note a number!!!! uwu")
+
+                if updatelocation != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE cars SET location = %s WHERE id = %s', (updatelocation, selectcarId,))  
+                    mysql.connection.commit()
+
+                if updatecost != '':
+                    if updatecost.isdigit() == True:
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('UPDATE cars SET cost = %s WHERE id = %s', (updatecost, selectcarId,))  
+                        mysql.connection.commit()
+                    else:
+                        print("note a number!!!! uwu")
+
+                return render_template('editCar.html')
+
+
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
 
 
 @app.route('/deleteCar', methods=['GET', 'POST'])
@@ -1212,10 +1271,15 @@ def addUser():
             hashPass = hashlib.sha256(saltPass.encode())
             encryptPass = hashPass.hexdigest()
 
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, encryptPass, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
-            #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
-            
+
+            if not re.match(r'[^@]+@[^@]+\.[^@]+', addemail):
+                msg = 'Invalid email address!'
+                print("bad--------------------------------------------------------------------")
+            else:
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (addusername, encryptPass, addfirstName, addlastName, addemail, addtypeofuser, addaccesstoken, mac))
+                #cursor.execute('INSERT INTO users VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)', (username, encryptPass, firstName, lastName, email, customer,accessToken, MAC))
+                
             mysql.connection.commit()
             return render_template('editUser.html')
         else:
@@ -1228,8 +1292,77 @@ def addUser():
 @app.route('/updateUser', methods=['GET', 'POST'])
 def updateUser():
 
-    pass
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
 
+            #idReport = request.form['idReport']
+            #broken = 'ISSUE'
+
+            #cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            #cursor.execute('UPDATE cars SET broken = %s WHERE id = %s', (broken, idReport,))  
+            #mysql.connection.commit()
+            #return redirect(url_for('searchDatabase'))
+            selectId = request.form['selectId']
+            editusername = request.form['updateusername']
+            editpassword = request.form['updatepassword']
+            editfirstName = request.form['updatefirstName']
+            editlastName = request.form['updatelastName']
+            editemail = request.form['updateemail']
+            edittypeofuser = request.form['updatetypeofuser']
+            editaccesstoken = ''
+            mac = ''
+            # generates a Salt and Hashes the Password with sha256
+            salt = "lcyysk2NAQOJCHxkM1fA"
+            saltPass = editpassword+salt
+            hashPass = hashlib.sha256(saltPass.encode())
+            encryptPass = hashPass.hexdigest()
+
+
+            #This is probably wrong uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu uwu
+            if selectId != '':
+                if editusername != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET username = %s WHERE id = %s', (editusername, selectId,))  
+                    mysql.connection.commit()
+                    
+                if editpassword != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET password = %s WHERE id = %s', (encryptPass, selectId,))  
+                    mysql.connection.commit()
+
+                if editfirstName != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET firstName = %s WHERE id = %s', (editfirstName, selectId,))  
+                    mysql.connection.commit()
+
+                if editlastName != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE users SET lastName = %s WHERE id = %s', (editlastName, selectId,))  
+                    mysql.connection.commit()
+
+                if editemail != '':
+                    if not re.match(r'[^@]+@[^@]+\.[^@]+', editemail):
+                        msg = 'Invalid email address!'
+                        print("bad__________________________---------------------- uwu")
+                    else:
+                        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                        cursor.execute('UPDATE users SET email = %s WHERE id = %s', (editemail, selectId,))  
+                        mysql.connection.commit()
+
+                if edittypeofuser != '':
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    #don't know what this is called 
+                    cursor.execute('UPDATE users SET typeOfUser = %s WHERE id = %s', (edittypeofuser, selectId,))  
+                    mysql.connection.commit()
+
+                return render_template('editUser.html')
+                
+            
+        else:
+            return render_template('profile.html')
+        
+    else:
+        return redirect(url_for('login')) 
             
 
 
