@@ -16,7 +16,12 @@ import hashlib
 
 
 #HOST = input("Enter IP address of server: ")
-def main():
+def clientAgent():
+    """
+    Function connects to host server through IP and Port.
+    User enters credentials and waits for server to verify.
+    Once verified user can unlock or lock car.
+    """
     #Intialize time variable
     now = datetime.datetime.now()
     #HOST = input("Enter IP address of server: ")
@@ -148,6 +153,9 @@ def main():
 
 #Gets current location of AgentPi
 def getLoc():
+    """
+    Function returns location of AgentPi
+    """
     r = requests.get('http://ipinfo.io/loc')   
     re = r.text
     ret = re.rstrip('\n')
@@ -159,6 +167,11 @@ def getLoc():
 #https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
 #Facial Recognition Function
 def faceID():
+    """
+    Function uses webcam to take images of face,
+    then encodes and matches data to dataset
+    returns name of recognized faces
+    """
 
     # Load taken photos encoding
     print("Preparing encodings...")
@@ -215,4 +228,4 @@ def faceID():
     # Stop Video Stream
     vs.stop()
     
-main()
+clientAgent()

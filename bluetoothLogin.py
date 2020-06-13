@@ -22,21 +22,30 @@ if(connection == None):
 
 
 def search():
+    """
+    Function searches for nearby phones using bluetooth, if known MAC is found,
+    car is unlocked. Database is updated. 
+    """
     while True:
+        print("Set AP Car ID")
+        carID = input("Enter Car ID: ")
+        
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
+        
         dt = time.strftime("%a, %d %b %y %H:%M:%S", time.localtime())
         print("\nCurrently: {}".format(dt))
+        
         nearby = bluetooth.discover_devices()
-        print("hi")
+        
 
         for mac_address in nearby:
-            print("ff")
+            
             while bluetooth.lookup_name(mac_address, timeout=5):
                 mac = mac_address
             
                 
-                #cursor.execute('SELECT * FROM users WHERE MAC= %s', (mac,)):
-                #account = cursor.fetchone()
+                cursor.execute('SELECT * FROM users WHERE MAC= %s', (mac,))
+                account = cursor.fetchone()
                 
                 #if engineer.matchMac(mac) == True:
                 if account:
@@ -45,10 +54,12 @@ def search():
                     print("Unlocking Vehicle")
                     cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                     carStr = "Repairing"
-                    carID = "3"
+                    
                     cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
                     connection.commit()
+                    
                     print(mac_address)
+                    
                     return True
                 else:
                     print("No Engineer Nearby")
@@ -60,4 +71,3 @@ def search():
             return False
             
 
-search()

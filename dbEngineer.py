@@ -3,6 +3,10 @@ import hashlib
 
 
 class engineer():
+    """
+    Function connects to database,
+    
+    """
     
     #Database connection
     MYSQL_HOST = "35.244.72.137"
@@ -14,18 +18,13 @@ class engineer():
     connection = None
     if(connection == None):
         connection = MySQLdb.connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB)
-    
-
-    
-    
-    
-    
-    
-    
-    
+ 
     
     
     def updater():
+    """
+    Function used to update users mac and token values
+    """
         while True: 
             cursor = connection.cursor(MySQLdb.cursors.DictCursor)
             user = "9"
@@ -44,6 +43,9 @@ class engineer():
             break
     
     def updateCars():
+    """
+    Function used to update car state to Working
+    """
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         carID = "3"
         state = "Working"
@@ -51,6 +53,9 @@ class engineer():
         connection.commit()
     
     def unlockCars():
+    """
+    Function used to update car state to Repairing
+    """
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         carStr = "Repairing"
         carID = "3"
@@ -59,6 +64,9 @@ class engineer():
         
         
     def matchMac(mac):
+    """
+    Function used to match given mac to database to find matches
+    """
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                             
         cursor.execute('SELECT * FROM users WHERE MAC= %s', (mac, ))

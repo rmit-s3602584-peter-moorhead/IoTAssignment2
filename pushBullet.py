@@ -6,11 +6,14 @@ import os
 import time
 
 
-#ACCESS_TOKEN="o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
+ACCESS_TOKEN="o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
 
-ACCESS_TOKEN = "o.GAWSGwtueYnZUAUCnkolGM3u7qg8iGmC"
+#ACCESS_TOKEN = "o.GAWSGwtueYnZUAUCnkolGM3u7qg8iGmC"
 
 def pushBullet():
+    """
+    Function gets variables and sends them to Engineer
+    """
     
     title = "REPORT - Car Broken"
     body = "Visit Website For Details"
