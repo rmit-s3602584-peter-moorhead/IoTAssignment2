@@ -1398,6 +1398,39 @@ def deleteUser():
     else:
         return redirect(url_for('login'))    
 
+@app.route('/searchBooking', methods=['GET','POST'])
+def searchBooking():
+    """
+    This function will render the template for the cars available to
+    hire. It also you can also search for available cars based on
+    their attributes via a POST form in carQuery.
+    """
+    # Check if user is loggedin
+    if session['typeOfUser'] == 'Admin':
+        if request.method == 'POST':
+        
+       
+            searchID=request.form['searchCarId']
+            if searchID != '':
+                if searchID.isdigit() == True:
+                    
+                    # We need all the account info for the user so we can display it on the profile page
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('SELECT * FROM bookings WHERE carId = %s', (searchID,))
+                    allHistory = cursor.fetchall()
+
+                    # Show the profile page with account info
+                    return render_template('home.html', allHistory=allHistory, typeOfUser=session['typeOfUser'], username=session['username'])
+        
+                else:
+                    return redirect(url_for('home'))
+            else:
+                return redirect(url_for('home'))
+            
+            
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
 
 
 # If modifying these scopes, delete the file token.pickle.
