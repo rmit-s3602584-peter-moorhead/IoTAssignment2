@@ -6,12 +6,12 @@ pcm.!default {
 pcm.mic {
   type plug
   slave {
-    pcm "hw:2,0"
+    pcm "hw:1,0"
   }
 }
 pcm.speaker {
   type plug
   slave {
-    pcm "hw:<card number>,<device number>"
+    pcm "hw:2,0"
   }
 }
