@@ -86,7 +86,19 @@
 <h2>Manager Page</h2>
 
 {% else %}
+
+
+
+
 <h2>User History</h2>
+
+<form action="{{ url_for('searchBooking') }}" method="post" autocomplete="off">
+	<input type="text" name="searchCarId" placeholder="Search car by ID" id="searchCarId">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
+
 
 <table id="myTable">
 <TR>
