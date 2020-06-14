@@ -1,5 +1,5 @@
 # Internet of Things Assignment 2
-###### Peter, Tim, Taylor, Joel
+###### Peter s3602584, Tim , Taylor, Joel
 ## Car Rental Service
 
 This repo aims to solve the assignment 3 of Internet of Things describing a car rental system
