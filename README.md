@@ -48,3 +48,7 @@ python3 -m venv venv
 ## Testing
 
 move the test.py to the level above the project folder and run python3 test.py
+
+
+## Task allocation
+under file Task_Allocation you will find who was responsible for which features
