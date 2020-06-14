@@ -8,6 +8,10 @@ Users will be able to register an account and login.
 Search Cars available for hire
 Make bookings and link their google calendar to tell them when they have their car
 Cancel existing bookings if need be
+Use Camera to read Qr BarCodes to retreive Engineers Profile
+Use Voice Recognition for Admin to Search Specific Cars
+PushBullet to send Notifications to engineers
+Bluetooth to find nearby devices and match MAC address to database of Known MAC addresses
 
 ## Logins
 * Username: admin1, Password: admin1
