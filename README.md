@@ -39,7 +39,7 @@ python3 -m venv venv
 
 ![Trello](/images/branches.PNG)
 ![Trello](/images/commits.PNG)
-![Trello](/images/usage.PNG)
+![Trello](/images/githubstats.PNG)
 
 ## Testing
 
