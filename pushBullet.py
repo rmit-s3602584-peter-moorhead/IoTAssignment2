@@ -47,4 +47,8 @@ def send(title, body):
             
             
             
+<<<<<<< HEAD
 #pushBullet()
+=======
+#pushBullet()
+>>>>>>> 4e27857d31acfc45b9503ed65a5001a24d4a210c
