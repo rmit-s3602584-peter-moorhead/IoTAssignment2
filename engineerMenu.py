@@ -88,8 +88,9 @@ def cred():
     hashPass = hashlib.sha256(saltPass.encode())
     enPa = hashPass.hexdigest()
     
+    utype = "Engineer"
     cursor = connection.cursor(MySQLdb.cursors.DictCursor)          
-    cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (us, enPa,))
+    cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s AND typeOfUser=%s', (us, enPa, utype, ))
     
                     
     account = cursor.fetchone()
