@@ -33,5 +33,5 @@ python3 -m venv venv
 
 ## Trello usage
 
-![Trello](images/trello.png)
+![Trello](/images/trello.png)
 
