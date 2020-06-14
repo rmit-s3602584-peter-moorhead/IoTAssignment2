@@ -1,8 +1,6 @@
 # Reference: https://docs.python.org/2/library/unittest.html
 import unittest
 import hashlib
-from qrReader import scan
-from bluetoothLogin import search
 import MySQLdb.cursors
 
 
