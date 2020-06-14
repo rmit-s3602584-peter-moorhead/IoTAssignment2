@@ -1,20 +1,11 @@
-import socket
-import datetime
-import requests
-import json
-import os
-import time
-from imutils.video import VideoStream
-import face_recognition
-import imutils
-import pickle
-import cv2
+#References
+#RMIT Programming Internet of Things Tutorial code achive
+
 import hashlib
-from dbEngineer import engineer
 from qrReader import scan
 from bluetoothLogin import search
 import MySQLdb.cursors
-import hashlib
+
 
 MYSQL_HOST = "35.244.72.137"
 MYSQL_USER = "root"
@@ -118,8 +109,19 @@ def menu():
     acc = scan()
     print("{} has Logged In".format(acc))
     
-    print("Enter Car ID")
+    
+    cursor.execute('SELECT * FROM users WHERE username=%s', (acc, ))
+    profile = cursor.fetchone()
+    
+    print()
+    print("Engineers Profile")
+    print(profile)
+    print()
+    
+    
+    print()
     carID = input("Enter Car ID: ")
+    print()
     
 
     carStr = "Repairing"
@@ -127,9 +129,11 @@ def menu():
     cursor.execute('UPDATE cars SET returned=%s WHERE id=%s', (carStr, carID))
     connection.commit()
     
+    print()
     print("Select Choice")
     print("1. Car Fixed - Return Car")
     print("2. Log Out")
+    print()
     
     sel = input("Enter Number: ")
     

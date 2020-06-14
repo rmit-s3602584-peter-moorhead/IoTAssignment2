@@ -73,7 +73,7 @@ def getCarID():
             return None
 
     # recognize speech using Google Speech Recognition
-    firstName = None
+    carID = None
     try:
         # for testing purposes, we're just using the default API key
         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
@@ -98,6 +98,7 @@ def searchCarID(carID):
     connection.close()
 
     return rows
+
 def verifyLogin():
     print("Welcome Admin")
     """

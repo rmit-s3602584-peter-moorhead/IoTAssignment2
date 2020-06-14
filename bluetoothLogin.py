@@ -1,14 +1,10 @@
-import socket
-import datetime
-import requests
-import json
-import os
+#References
+#RMIT Programming Internet of Things Tutorial code achive
+
 import bluetooth
 import time
-from sense_hat import SenseHat
-from dbEngineer import engineer
 import MySQLdb.cursors
-import hashlib
+
 
 MYSQL_HOST = "35.244.72.137"
 MYSQL_USER = "root"

@@ -1,3 +1,6 @@
+#References
+#RMIT Programming Internet of Things Tutorial code achive
+
 import MySQLdb.cursors
 import hashlib
 
@@ -22,9 +25,9 @@ class engineer():
     
     
     def updater():
-    """
-    Function used to update users mac and token values
-    """
+        """
+        Function used to update users mac and token values
+        """
         while True: 
             cursor = connection.cursor(MySQLdb.cursors.DictCursor)
             user = "9"
@@ -43,9 +46,9 @@ class engineer():
             break
     
     def updateCars():
-    """
-    Function used to update car state to Working
-    """
+        """
+        Function used to update car state to Working
+        """
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         carID = "3"
         state = "Working"
@@ -53,9 +56,9 @@ class engineer():
         connection.commit()
     
     def unlockCars():
-    """
-    Function used to update car state to Repairing
-    """
+        """
+        Function used to update car state to Repairing
+        """
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
         carStr = "Repairing"
         carID = "3"
@@ -64,9 +67,9 @@ class engineer():
         
         
     def matchMac(mac):
-    """
-    Function used to match given mac to database to find matches
-    """
+        """
+        Function used to match given mac to database to find matches
+        """
         cursor = connection.cursor(MySQLdb.cursors.DictCursor)
                             
         cursor.execute('SELECT * FROM users WHERE MAC= %s', (mac, ))
