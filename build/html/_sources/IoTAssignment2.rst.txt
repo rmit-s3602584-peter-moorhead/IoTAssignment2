@@ -3,6 +3,7 @@ IoTAssignment2 package
 
 Submodules
 ----------
+
 IoTAssignment2.agentClient module
 ---------------------------------
 
@@ -21,7 +22,16 @@ IoTAssignment2.agentServer module
 
 IoTAssignment2.api module
 -------------------------
+
 .. automodule:: IoTAssignment2.api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IoTAssignment2.bluetoothLogin module
+------------------------------------
+
+.. automodule:: IoTAssignment2.bluetoothLogin
    :members:
    :undoc-members:
    :show-inheritance:
@@ -34,6 +44,14 @@ IoTAssignment2.cal\_setup module
    :undoc-members:
    :show-inheritance:
 
+IoTAssignment2.dbEngineer module
+--------------------------------
+
+.. automodule:: IoTAssignment2.dbEngineer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 IoTAssignment2.dbUtil module
 ----------------------------
 
@@ -42,10 +60,42 @@ IoTAssignment2.dbUtil module
    :undoc-members:
    :show-inheritance:
 
+IoTAssignment2.qrReader module
+------------------------------
+
+.. automodule:: IoTAssignment2.qrReader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IoTAssignment2.engineerMenu module
+----------------------------------
+
+.. automodule:: IoTAssignment2.engineerMenu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IoTAssignment2.engineerTest module
+----------------------------------
+
+.. automodule:: IoTAssignment2.engineerTest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 IoTAssignment2.menu module
 --------------------------
 
 .. automodule:: IoTAssignment2.menu
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IoTAssignment2.pushBullet module
+--------------------------------
+
+.. automodule:: IoTAssignment2.pushBullet
    :members:
    :undoc-members:
    :show-inheritance:
@@ -62,6 +112,14 @@ IoTAssignment2.test module
 --------------------------
 
 .. automodule:: IoTAssignment2.test
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+IoTAssignment2.ttsAdmin module
+------------------------------
+
+.. automodule:: IoTAssignment2.ttsAdmin
    :members:
    :undoc-members:
    :show-inheritance:

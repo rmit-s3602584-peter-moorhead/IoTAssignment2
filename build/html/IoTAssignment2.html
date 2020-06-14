@@ -48,47 +48,92 @@
 <div class="section" id="module-IoTAssignment2.agentClient">
 <span id="iotassignment2-agentclient-module"></span><h2>IoTAssignment2.agentClient module<a class="headerlink" href="#module-IoTAssignment2.agentClient" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt id="IoTAssignment2.agentClient.clientAgent">
+<code class="sig-prename descclassname">IoTAssignment2.agentClient.</code><code class="sig-name descname">clientAgent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.agentClient.clientAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function connects to host server through IP and Port.
+User enters credentials and waits for server to verify.
+Once verified user can unlock or lock car.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="IoTAssignment2.agentClient.faceID">
 <code class="sig-prename descclassname">IoTAssignment2.agentClient.</code><code class="sig-name descname">faceID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.agentClient.faceID" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function uses webcam to take images of face,
+then encodes and matches data to dataset
+returns name of recognized faces</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.agentClient.getLoc">
 <code class="sig-prename descclassname">IoTAssignment2.agentClient.</code><code class="sig-name descname">getLoc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.agentClient.getLoc" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="IoTAssignment2.agentClient.main">
-<code class="sig-prename descclassname">IoTAssignment2.agentClient.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.agentClient.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function returns location of AgentPi</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-IoTAssignment2.agentServer">
 <span id="iotassignment2-agentserver-module"></span><h2>IoTAssignment2.agentServer module<a class="headerlink" href="#module-IoTAssignment2.agentServer" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="IoTAssignment2.agentServer.main">
-<code class="sig-prename descclassname">IoTAssignment2.agentServer.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.agentServer.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="IoTAssignment2.agentServer.serverAgent">
+<code class="sig-prename descclassname">IoTAssignment2.agentServer.</code><code class="sig-name descname">serverAgent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.agentServer.serverAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function Hosts Server for Agent Pi,
+Connects to MySQL Database to update location and car state
+Verifies Users Credentials,</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-IoTAssignment2.api">
 <span id="iotassignment2-api-module"></span><h2>IoTAssignment2.api module<a class="headerlink" href="#module-IoTAssignment2.api" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt id="IoTAssignment2.api.addCar">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">addCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.addCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin add car method to fill out a form that is then
+inputted into the google database for further hire by users</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.addUser">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">addUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.addUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin add user method to fill out a form that is then
+inputted into the google database for further use</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.adminCarQuery">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">adminCarQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.adminCarQuery" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes the data from a form and builds an sql query based
+on what variation of car attributes admin was looking for.
+Querying users and cars table for admins</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.adminUserQuery">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">adminUserQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.adminUserQuery" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes the data from a form and builds an sql query based
+on what variation of user attributes admin was looking for.
+If the form is blank it returns all the users available like the users route.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="IoTAssignment2.api.cancelBooking">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">cancelBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.cancelBooking" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>User inputs the booking id that they want to cancel which is then updated in the
+google sql database and also the google calender event gets cancelled</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.carBooking">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">carBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.carBooking" title="Permalink to this definition">¶</a></dt>
-<dd><p>User will book a car by posting to the booking and car tables</p>
+<dd><p>User inputs car by id they want to book and number of days and the session variable
+is parsed as well as the form data and creates an sql update in the database to
+allocate that car to them and also creates a google calendar event for that user.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.carManagement">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">carManagement</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.carManagement" title="Permalink to this definition">¶</a></dt>
 <dd><p>An admin function that will let admin’s perform database operations
-that regular users should not be able to.</p>
+that regular users should not be able to.
+Legacy route</p>
 </dd></dl>
 
 <dl class="py function">
@@ -107,6 +152,30 @@ hopefully in the future provide a more robust input validation scheme.</p>
 <dd><p>This function will render the template for the cars available to
 hire. It also you can also search for available cars based on
 their attributes via a POST form in carQuery.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.deleteCar">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">deleteCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.deleteCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin specifies car id to delete which is removed from the databse.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.deleteUser">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">deleteUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.deleteUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin specifies user id to delete which is removed from the databse.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.editCar">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">editCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.editCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>default edit car page for the admin</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.editUser">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">editUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.editUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>default edit user page for the admin</p>
 </dd></dl>
 
 <dl class="py function">
@@ -159,9 +228,54 @@ to the database and a new user will be registered.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="IoTAssignment2.api.reportCar">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">reportCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.reportCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin uses this route to issue a notification for an engineer to fix the car by
+updating the broken column on a car by filling out a form and sending the data
+to the google database.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.searchBooking">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">searchBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.searchBooking" title="Permalink to this definition">¶</a></dt>
+<dd><p>This route lets an admin search through the booking history for a specific
+cars bookings.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.searchDatabase">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">searchDatabase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.searchDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays users and cars tables for admin to query</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.updateCar">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">updateCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.updateCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin updates car values by way of form, specifies car id and uses that
+to identify which car is being updated. Values left blank will not be updated</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.api.updateUser">
+<code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">updateUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.updateUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Admin updates user values by way of form, specifies car id and uses that
+to identify which user is being updated. Values left blank will not be updated</p>
+</dd></dl>
+
+<dl class="py function">
 <dt id="IoTAssignment2.api.userhistory">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">userhistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.userhistory" title="Permalink to this definition">¶</a></dt>
-<dd><p>User will display history of bookings</p>
+<dd><p>Method to display history of bookings</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-IoTAssignment2.bluetoothLogin">
+<span id="iotassignment2-bluetoothlogin-module"></span><h2>IoTAssignment2.bluetoothLogin module<a class="headerlink" href="#module-IoTAssignment2.bluetoothLogin" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="IoTAssignment2.bluetoothLogin.search">
+<code class="sig-prename descclassname">IoTAssignment2.bluetoothLogin.</code><code class="sig-name descname">search</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.bluetoothLogin.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function searches for nearby phones using bluetooth, if known MAC is found,
+car is unlocked. Database is updated.</p>
 </dd></dl>
 
 </div>
@@ -171,6 +285,65 @@ to the database and a new user will be registered.</p>
 <dt id="IoTAssignment2.cal_setup.get_calendar_service">
 <code class="sig-prename descclassname">IoTAssignment2.cal_setup.</code><code class="sig-name descname">get_calendar_service</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.cal_setup.get_calendar_service" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</div>
+<div class="section" id="module-IoTAssignment2.dbEngineer">
+<span id="iotassignment2-dbengineer-module"></span><h2>IoTAssignment2.dbEngineer module<a class="headerlink" href="#module-IoTAssignment2.dbEngineer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="IoTAssignment2.dbEngineer.engineer">
+<em class="property">class </em><code class="sig-prename descclassname">IoTAssignment2.dbEngineer.</code><code class="sig-name descname">engineer</code><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Function connects to database,</p>
+<dl class="py attribute">
+<dt id="IoTAssignment2.dbEngineer.engineer.MYSQL_DB">
+<code class="sig-name descname">MYSQL_DB</code><em class="property"> = 'Peopl'</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.MYSQL_DB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="IoTAssignment2.dbEngineer.engineer.MYSQL_HOST">
+<code class="sig-name descname">MYSQL_HOST</code><em class="property"> = '35.244.72.137'</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.MYSQL_HOST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="IoTAssignment2.dbEngineer.engineer.MYSQL_PASSWORD">
+<code class="sig-name descname">MYSQL_PASSWORD</code><em class="property"> = '1234'</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.MYSQL_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="IoTAssignment2.dbEngineer.engineer.MYSQL_USER">
+<code class="sig-name descname">MYSQL_USER</code><em class="property"> = 'root'</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.MYSQL_USER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="IoTAssignment2.dbEngineer.engineer.connection">
+<code class="sig-name descname">connection</code><em class="property"> = &lt;_mysql.connection open to '35.244.72.137' at 0xf05b80&gt;</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.dbEngineer.engineer.matchMac">
+<code class="sig-name descname">matchMac</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.matchMac" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used to match given mac to database to find matches</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.dbEngineer.engineer.unlockCars">
+<code class="sig-name descname">unlockCars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.unlockCars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used to update car state to Repairing</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.dbEngineer.engineer.updateCars">
+<code class="sig-name descname">updateCars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.updateCars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used to update car state to Working</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.dbEngineer.engineer.updater">
+<code class="sig-name descname">updater</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.updater" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used to update users mac and token values</p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="module-IoTAssignment2.dbUtil">
@@ -257,8 +430,111 @@ to the database and a new user will be registered.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-IoTAssignment2.qrReader">
+<span id="iotassignment2-qrreader-module"></span><h2>IoTAssignment2.qrReader module<a class="headerlink" href="#module-IoTAssignment2.qrReader" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="IoTAssignment2.qrReader.scan">
+<code class="sig-prename descclassname">IoTAssignment2.qrReader.</code><code class="sig-name descname">scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.qrReader.scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function uses webcam to scan for barcodes,
+if found, converts to string and returns value.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-IoTAssignment2.engineerMenu">
+<span id="iotassignment2-engineermenu-module"></span><h2>IoTAssignment2.engineerMenu module<a class="headerlink" href="#module-IoTAssignment2.engineerMenu" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="IoTAssignment2.engineerMenu.cred">
+<code class="sig-prename descclassname">IoTAssignment2.engineerMenu.</code><code class="sig-name descname">cred</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerMenu.cred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function accepts input and verifies user login with database.
+If user enters correct data, function returns true.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.engineerMenu.menu">
+<code class="sig-prename descclassname">IoTAssignment2.engineerMenu.</code><code class="sig-name descname">menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerMenu.menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function displays menu that appears after user logs in.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.engineerMenu.searchLogin">
+<code class="sig-prename descclassname">IoTAssignment2.engineerMenu.</code><code class="sig-name descname">searchLogin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerMenu.searchLogin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function Searches for Phone,
+If known Phone Found, then displays menu,
+Allows Engineer to login to unlock car</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-IoTAssignment2.engineerTest">
+<span id="iotassignment2-engineertest-module"></span><h2>IoTAssignment2.engineerTest module<a class="headerlink" href="#module-IoTAssignment2.engineerTest" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="IoTAssignment2.engineerTest.TestStringMethods">
+<em class="property">class </em><code class="sig-prename descclassname">IoTAssignment2.engineerTest.</code><code class="sig-name descname">TestStringMethods</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.TestStringMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Function runs all Engineer Related Tests</p>
+<dl class="py method">
+<dt id="IoTAssignment2.engineerTest.TestStringMethods.test_carID">
+<code class="sig-name descname">test_carID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.TestStringMethods.test_carID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function runs test to find Car By ID</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.engineerTest.TestStringMethods.test_cred">
+<code class="sig-name descname">test_cred</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.TestStringMethods.test_cred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function runs test to verify Engineer Login</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.engineerTest.TestStringMethods.test_login">
+<code class="sig-name descname">test_login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.TestStringMethods.test_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function runs test to verify Admin login</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.engineerTest.testCarID">
+<code class="sig-prename descclassname">IoTAssignment2.engineerTest.</code><code class="sig-name descname">testCarID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.testCarID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test Function accepts input and finds car with specific ID</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.engineerTest.testCred">
+<code class="sig-prename descclassname">IoTAssignment2.engineerTest.</code><code class="sig-name descname">testCred</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">us</span></em>, <em class="sig-param"><span class="n">pa</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.testCred" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test Function accepts input and verifies user login with database.
+If user enters correct data, function returns true.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.engineerTest.testVerifyLogin">
+<code class="sig-prename descclassname">IoTAssignment2.engineerTest.</code><code class="sig-name descname">testVerifyLogin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">us</span></em>, <em class="sig-param"><span class="n">pa</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.engineerTest.testVerifyLogin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test Function accepts input and verifies user login with database.
+Also checks type of User is Admin
+If user enters correct data, function returns true.</p>
+</dd></dl>
+
+</div>
 <div class="section" id="iotassignment2-menu-module">
 <h2>IoTAssignment2.menu module<a class="headerlink" href="#iotassignment2-menu-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-IoTAssignment2.pushBullet">
+<span id="iotassignment2-pushbullet-module"></span><h2>IoTAssignment2.pushBullet module<a class="headerlink" href="#module-IoTAssignment2.pushBullet" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="IoTAssignment2.pushBullet.pushBullet">
+<code class="sig-prename descclassname">IoTAssignment2.pushBullet.</code><code class="sig-name descname">pushBullet</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.pushBullet.pushBullet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function gets variables and sends them to Engineer</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.pushBullet.send">
+<code class="sig-prename descclassname">IoTAssignment2.pushBullet.</code><code class="sig-name descname">send</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span></em>, <em class="sig-param"><span class="n">body</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.pushBullet.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sending notification via pushbullet.
+Args:</p>
+<blockquote>
+<div><p>title (str) : title of text.
+body (str) : Body of text.</p>
+</div></blockquote>
+</dd></dl>
+
 </div>
 <div class="section" id="iotassignment2-setup-module">
 <h2>IoTAssignment2.setup module<a class="headerlink" href="#iotassignment2-setup-module" title="Permalink to this headline">¶</a></h2>
@@ -269,9 +545,35 @@ to the database and a new user will be registered.</p>
 <dt id="IoTAssignment2.test.FlaskTestCase">
 <em class="property">class </em><code class="sig-prename descclassname">IoTAssignment2.test.</code><code class="sig-name descname">FlaskTestCase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Unit test</p>
+<dl class="py method">
+<dt id="IoTAssignment2.test.FlaskTestCase.test_car_history">
+<code class="sig-name descname">test_car_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_car_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.test.FlaskTestCase.test_correct_Manager_login">
+<code class="sig-name descname">test_correct_Manager_login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_correct_Manager_login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.test.FlaskTestCase.test_correct_admin_login">
+<code class="sig-name descname">test_correct_admin_login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_correct_admin_login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="IoTAssignment2.test.FlaskTestCase.test_correct_cars">
 <code class="sig-name descname">test_correct_cars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_correct_cars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.test.FlaskTestCase.test_correct_customer_login">
+<code class="sig-name descname">test_correct_customer_login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_correct_customer_login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="IoTAssignment2.test.FlaskTestCase.test_correct_engineer_login">
+<code class="sig-name descname">test_correct_engineer_login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_correct_engineer_login" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -309,7 +611,38 @@ to the database and a new user will be registered.</p>
 <code class="sig-name descname">test_search_correcrt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_search_correcrt" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt id="IoTAssignment2.test.FlaskTestCase.test_search_user_correct">
+<code class="sig-name descname">test_search_user_correct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.test.FlaskTestCase.test_search_user_correct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
+
+</div>
+<div class="section" id="module-IoTAssignment2.ttsAdmin">
+<span id="iotassignment2-ttsadmin-module"></span><h2>IoTAssignment2.ttsAdmin module<a class="headerlink" href="#module-IoTAssignment2.ttsAdmin" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="IoTAssignment2.ttsAdmin.adminTts">
+<code class="sig-prename descclassname">IoTAssignment2.ttsAdmin.</code><code class="sig-name descname">adminTts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.ttsAdmin.adminTts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function runs all modules involved with Admin searching Cars Via Voice Recognition</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.ttsAdmin.getCarID">
+<code class="sig-prename descclassname">IoTAssignment2.ttsAdmin.</code><code class="sig-name descname">getCarID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.ttsAdmin.getCarID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function uses microphone for voice recognition to find details of an item based on ID</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.ttsAdmin.searchCarID">
+<code class="sig-prename descclassname">IoTAssignment2.ttsAdmin.</code><code class="sig-name descname">searchCarID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">carID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.ttsAdmin.searchCarID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function accepts input and finds car with specific ID</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="IoTAssignment2.ttsAdmin.verifyLogin">
+<code class="sig-prename descclassname">IoTAssignment2.ttsAdmin.</code><code class="sig-name descname">verifyLogin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.ttsAdmin.verifyLogin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-IoTAssignment2">
@@ -330,11 +663,18 @@ to the database and a new user will be registered.</p>
 <li><a class="reference internal" href="#module-IoTAssignment2.agentClient">IoTAssignment2.agentClient module</a></li>
 <li><a class="reference internal" href="#module-IoTAssignment2.agentServer">IoTAssignment2.agentServer module</a></li>
 <li><a class="reference internal" href="#module-IoTAssignment2.api">IoTAssignment2.api module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.bluetoothLogin">IoTAssignment2.bluetoothLogin module</a></li>
 <li><a class="reference internal" href="#module-IoTAssignment2.cal_setup">IoTAssignment2.cal_setup module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.dbEngineer">IoTAssignment2.dbEngineer module</a></li>
 <li><a class="reference internal" href="#module-IoTAssignment2.dbUtil">IoTAssignment2.dbUtil module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.qrReader">IoTAssignment2.qrReader module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.engineerMenu">IoTAssignment2.engineerMenu module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.engineerTest">IoTAssignment2.engineerTest module</a></li>
 <li><a class="reference internal" href="#iotassignment2-menu-module">IoTAssignment2.menu module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.pushBullet">IoTAssignment2.pushBullet module</a></li>
 <li><a class="reference internal" href="#iotassignment2-setup-module">IoTAssignment2.setup module</a></li>
 <li><a class="reference internal" href="#module-IoTAssignment2.test">IoTAssignment2.test module</a></li>
+<li><a class="reference internal" href="#module-IoTAssignment2.ttsAdmin">IoTAssignment2.ttsAdmin module</a></li>
 <li><a class="reference internal" href="#module-IoTAssignment2">Module contents</a></li>
 </ul>
 </li>

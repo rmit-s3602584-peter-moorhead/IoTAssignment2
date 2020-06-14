@@ -1,0 +1,102 @@
+{% extends 'adminLayout.html' %}
+<p>Search Db</p>
+{% block content %}
+<h2>Car and User Search</h2>
+<p>Search Cars and Users</p>
+
+<form action="{{ url_for('adminCarQuery') }}" method="post" autocomplete="off">
+	<input type="text" name="idCar" placeholder="Search by id" id="idCar">
+	<input type="text" name="make" placeholder="Search by make" id="make">
+	<input type="text" name="bodyType" placeholder="Search by body type" id="bodyType">
+	<input type="text" name="colour" placeholder="Search by colour" id="colour">
+	<input type="text" name="seats" placeholder="Search by number of seats" id="seats">
+	<input type="text" name="location" placeholder="Search by location" id="location">
+	<input type="text" name="cost" placeholder="Search by cost per day" id="cost">
+	<input type="text" name="bookedBy" placeholder="Search by user booked" id="bookedBy">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
+<table id="myTable">
+<TR>
+	<TH>Id</TH>
+	<TH>Make</TH>
+	<TH>Body Type</TH>
+	<TH>Colour</TH>
+	<TH>Seats</TH>
+	<TH>Location</TH>
+	<TH>Cost</TH>
+	<TH>BookedBy</TH>
+	<TH>LongLat</TH>
+	<TH>Returned</TH>
+	<TH>Broke?</TH>
+</TR>
+
+{% for row in cars %}
+<TR>
+	<TD>{{row.id}}</TD>
+	<TD>{{row.make}}</TD>
+	<TD>{{row.bodyType}}</TD>
+	<TD>{{row.colour}}</TD>
+	<TD>{{row.seats}}</TD>
+	<TD>{{row.location}}</TD>
+	<TD>{{row.cost}}</TD>
+	<TD>{{row.bookedBy}}</TD>
+	<TD>{{row.longlat}}</TD>
+	<TD>{{row.returned}}</TD>
+	<TD>{{row.broken}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+<form action="{{ url_for('reportCar') }}" method="post" autocomplete="off">
+	<input type="text" name="idReport" placeholder="Report by id" id="idReport" required>
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Report">
+</form>
+
+
+
+
+<form action="{{ url_for('adminUserQuery') }}" method="post" autocomplete="off">
+	<input type="text" name="idUser" placeholder="Search by id" id="idCar">
+	<input type="text" name="username" placeholder="Search by username" id="make">
+	<input type="text" name="password" placeholder="Search by password" id="bodyType">
+	<input type="text" name="firstName" placeholder="Search by first name" id="colour">
+	<input type="text" name="lastName" placeholder="Search by last name" id="seats">
+	<input type="text" name="email" placeholder="Search by email" id="location">
+	<input type="text" name="typeOfUser" placeholder="Search by type of user" id="cost">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Search">
+</form>
+
+<table id="myTable">
+<TR>
+	<TH>Id</TH>
+	<TH>Username</TH>
+	<TH>Password</TH>
+	<TH>First Name</TH>
+	<TH>Last Name</TH>
+	<TH>Email</TH>
+	<TH>User Type</TH>
+	<TH>Access Token</TH>
+	<TH>MAC Address</TH>
+</TR>
+
+{% for row in users %}
+<TR>
+	<TD>{{row.id}}</TD>
+	<TD>{{row.username}}</TD>
+	<TD>{{row.password}}</TD>
+	<TD>{{row.firstName}}</TD>
+	<TD>{{row.lastName}}</TD>
+	<TD>{{row.email}}</TD>
+	<TD>{{row.typeOfUser}}</TD>
+	<TD>{{row.accessToken}}</TD>
+	<TD>{{row.MAC}}</TD>
+</TR>
+{% endfor %}
+</table>
+
+
+{% endblock %}

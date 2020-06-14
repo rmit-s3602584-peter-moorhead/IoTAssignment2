@@ -1,0 +1,48 @@
+{% extends 'adminLayout.html' %}
+
+{% block title %}Edit Users{% endblock %}
+
+
+{% block content %}
+<h2>User Edit</h2>
+<p>This is where you add, update and delete users.</p>
+
+<form action="{{ url_for('addUser') }}" method="post" autocomplete="off">
+	<input type="text" name="addusername" placeholder="Add username" id="addusername" maxlength="50" required>
+	<input type="text" name="addpassword" placeholder="Add password" id="addpassword" maxlength="20" required>
+	<input type="text" name="addfirstName" placeholder="Add First name" id="addfirstName" maxlength="15" required>
+	<input type="text" name="addlastName" placeholder="Add Last name" id="addlastName" maxlength="50" required>
+	<input type="text" name="addemail" placeholder="Add email" id="addemail" maxlength="100" required>
+	<input type="text" name="addtypeofuser" placeholder="Add type of user"addtypeofuser" maxlength="10" required>
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Add User">
+</form>
+
+	
+
+<form action="{{ url_for('updateUser') }}" method="post" autocomplete="off">
+	<input type="text" name="selectId" placeholder="Select ID" id="selectId" required>
+	<br>
+	<input type="text" name="updateusername" placeholder="update username" id="updateusername" maxlength="50">
+	<input type="text" name="updatepassword" placeholder="update password" id="updatepassword" maxlength="20">
+	<input type="text" name="updatefirstName" placeholder="update First name" id="updatefirstName" maxlength="15">
+	<input type="text" name="updatelastName" placeholder="update Last name" id="updatelastName" maxlength="50">
+	<input type="text" name="updateemail" placeholder="update email" id="updateemail" maxlength="100">
+	<input type="text" name="updatetypeofuser" placeholder="update type of user"updatetypeofuser" maxlength="10">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Update">
+</form>
+
+<form action="{{ url_for('deleteUser') }}" method="post" autocomplete="off">
+	<input type="text" name="deleteUid" placeholder="Delete user by id" id="deleteUid">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Delete">
+</form>
+
+{% endblock %}
+
+
+
+
+
+

@@ -1,4 +1,12 @@
+{% if typeOfUser == 'Admin' %}
+{% extends 'adminLayout.html' %}
+{% elif typeOfUser == 'Engineer' %}
+{% extends 'engineerLayout.html' %}
+{% elif typeOfUser == 'Manager' %}
+{% extends 'managerLayout.html' %}
+{% else %}
 {% extends 'layout.html' %}
+{% endif %}
 
 {% block title %}Profile{% endblock %}
 

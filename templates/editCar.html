@@ -1,0 +1,46 @@
+{% extends 'adminLayout.html' %}
+
+{% block title %}Edit Cars{% endblock %}
+
+
+{% block content %}
+<h2>Car Edit</h2>
+<p>This is where you add, update and delete cars.</p>
+
+<form action="{{ url_for('addCar') }}" method="post" autocomplete="off">
+	<input type="text" name="addmake" placeholder="Add make" id="addmake" maxlength="50" required>
+	<input type="text" name="addbodyType" placeholder="Add body type" id="addbodyType" maxlength="10" required>
+	<input type="text" name="addcolour" placeholder="Add colour" id="addcolour" maxlength="15" required>
+	<input type="text" name="addseats" placeholder="Add number of seats" id="addseats" maxlength="2" required>
+	<input type="text" name="addlocation" placeholder="Add location" id="addlocation" maxlength="20" required>
+	<input type="text" name="addcost" placeholder="Add cost per day" id="addcost" maxlength="4" required>
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Add car">
+</form>
+
+<form action="{{ url_for('updateCar') }}" method="post" autocomplete="off">
+	<input type="text" name="selectcarId" placeholder="Select Car Id" id="selectcarId">
+	<br>
+	<input type="text" name="updatemake" placeholder="Update make" id="updatemake" maxlength="50">
+	<input type="text" name="updatebodyType" placeholder="Update body type" id="updatebodyType" maxlength="10">
+	<input type="text" name="updatecolour" placeholder="Update colour" id="updatecolour" maxlength="15">
+	<input type="text" name="updateseats" placeholder="Update number of seats" id="updateseats" maxlength="2">
+	<input type="text" name="updatelocation" placeholder="Update location" id="updatelocation" maxlength="20">
+	<input type="text" name="updatecost" placeholder="Update cost per day" id="updatecost" maxlength="4">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Update">
+</form>
+
+<form action="{{ url_for('deleteCar') }}" method="post" autocomplete="off">
+	<input type="text" name="deleteid" placeholder="Delete car by id" id="deleteid">
+	<div class="msg">{{ msg }}</div>
+	<input type="submit" value="Delete">
+</form>
+
+{% endblock %}
+
+
+
+
+
+

@@ -4,7 +4,12 @@
 import socket
 import MySQLdb.cursors
 import hashlib
-def main():
+def serverAgent():
+    """
+    Function Hosts Server for Agent Pi,
+    Connects to MySQL Database to update location and car state
+    Verifies Users Credentials, 
+    """
     
     #Database connection
     MYSQL_HOST = "35.244.72.137"
@@ -221,5 +226,5 @@ def main():
 
 
 
-main()
+serverAgent()
 
