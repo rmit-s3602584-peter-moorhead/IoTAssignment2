@@ -17,16 +17,28 @@ if(connection == None):
     connection = MySQLdb.connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB)
 
 class TestStringMethods(unittest.TestCase):
+    """
+    Function runs all Engineer Related Tests 
+    """
     def test_login(self):
+        """
+        Function runs test to verify Admin login
+        """
         print("Admin Verification Test")
         login = "admin1"
         self.assertEqual(testVerifyLogin(login, login), True)
         
     def test_cred(self):
+        """
+        Function runs test to verify Engineer Login
+        """
         print("Login Verification Test")
         login = "Engineer1"
         self.assertEqual(testCred(login, login), True)
     def test_carID(self):
+        """
+        Function runs test to find Car By ID
+        """
         print("Search Car By ID Test")
         carID = "1"
         self.assertEqual(testCarID(carID), True)
