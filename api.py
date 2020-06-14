@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-#from IoTAssignment2 import pushBullet
+from IoTAssignment2 import pushBullet as pushBullet
 #from cal_setup import get_calendar_service
 import MySQLdb.cursors
 import re
@@ -121,7 +121,7 @@ def register():
         firstName = request.form['firstName']
         lastName = request.form['lastName']
         email = request.form['email']
-        customer = "Manager"
+        customer = "Customer"
         accessToken = ''
         MAC = ''
         # Generates a Salt and Hashes the Password with sha256
@@ -250,7 +250,8 @@ def cars():
 @app.route('/carManagement')
 def carManagement():
     """
-    Legacy route
+    An admin function that will let admin's perform database operations
+    that regular users should not be able to.
     """
     if 'loggedin' in session:
         # User is loggedin show them the home page
@@ -469,9 +470,7 @@ def carQuery():
 def carBooking():
     
     """
-    User inputs car by id they want to book and number of days and the session variable
-    is parsed as well as the form data and creates an sql update in the database to
-    allocate that car to them and also creates a google calendar event for that user.
+    User will book a car by posting to the booking and car tables
     """
     if 'loggedin' in session:
         if request.method == 'POST':
@@ -568,12 +567,6 @@ def carBooking():
 @app.route('/cancelBooking', methods=['GET', 'POST'])
 def cancelBooking():
 
-    """
-    User inputs the booking id that they want to cancel which is then updated in the
-    google sql database and also the google calender event gets cancelled
-    """
-
-
     if 'loggedin' in session:
         if request.method == 'POST':
             userid = session['id']
@@ -666,7 +659,7 @@ def cancelBooking():
 def userhistory():
     
     """
-    Method to display history of bookings
+    User will display history of bookings
     """
     if 'loggedin' in session:
         if request.method == 'POST':
@@ -716,8 +709,10 @@ def searchDatabase():
 def adminCarQuery():
     """
     This function takes the data from a form and builds an sql query based
-    on what variation of car attributes admin was looking for.
-    Querying users and cars table for admins
+    on what variation of attribute admin was looking for.
+    querying users and cars table for admins
+    It is probably susceptible to an SQL injection at the moment but will
+    hopefully in the future provide a more robust input validation scheme.
     """
     #return render_template('searchDatabase.html')
     if session['typeOfUser'] == 'Admin':
@@ -743,6 +738,10 @@ def adminCarQuery():
             bookedBy = request.form['bookedBy']
             returned = 0
 
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM users')
+            users = cursor.fetchall()
+            
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM cars')
@@ -905,8 +904,10 @@ def adminCarQuery():
                     my_string = my_string + row['longlat'] + '|'
 
                 print(my_string)
+                
+                
                 # Show the profile page with account info
-                return render_template('searchDatabase.html', cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string)
+                return render_template('searchDatabase.html', cars=cars, typeOfUser=session['typeOfUser'], my_string=my_string, users=users)
                             
             
         
@@ -917,7 +918,7 @@ def adminCarQuery():
 def adminUserQuery():
     """
     This function takes the data from a form and builds an sql query based
-    on what variation of user attributes admin was looking for.
+    on what variation of attribute user was looking for.
     If the form is blank it returns all the users available like the users route.
     """
     #return render_template('searchDatabase.html')
@@ -927,7 +928,7 @@ def adminUserQuery():
             
             idCar = request.form['id']
             cursor.execute('SELECT * FROM users')
-            cars = cursor.fetchone()
+            #cars = cursor.fetchone()
             #print(cars)
             #return render_template('cars.html', cars=cars)
             return render_template('home.html')
@@ -943,6 +944,9 @@ def adminUserQuery():
 
             returned = 0
 
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM cars')
+            cars = cursor.fetchall()
             
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM users')
@@ -1091,7 +1095,7 @@ def adminUserQuery():
 
                 #print(my_string)
                 # Show the profile page with account info
-                return render_template('searchDatabase.html', users=users, typeOfUser=session['typeOfUser'])
+                return render_template('searchDatabase.html', users=users, typeOfUser=session['typeOfUser'], cars=cars)
                             
             
         
@@ -1100,13 +1104,6 @@ def adminUserQuery():
 
 @app.route('/reportCar', methods=['GET', 'POST'])
 def reportCar():
-    
-    """
-    Admin uses this route to issue a notification for an engineer to fix the car by
-    updating the broken column on a car by filling out a form and sending the data
-    to the google database.
-    """
-    
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1115,7 +1112,7 @@ def reportCar():
 
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE cars SET broken = %s WHERE id = %s', (broken, idReport,))
-            #pushBullet.pushBullet()  
+            pushBullet.pushBullet()  
             mysql.connection.commit()
             return redirect(url_for('searchDatabase'))
         else:
@@ -1126,11 +1123,6 @@ def reportCar():
 
 @app.route('/editCar')
 def editCar():
-    
-    """
-    default edit car page for the admin
-    """
-    
     if session['typeOfUser'] == 'Admin':
         return render_template('editCar.html')
     else:
@@ -1138,12 +1130,6 @@ def editCar():
                  
 @app.route('/addCar', methods=['GET', 'POST'])
 def addCar():
-    
-    """
-    Admin add car method to fill out a form that is then
-    inputted into the google database for further hire by users
-    """
-    
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1173,12 +1159,6 @@ def addCar():
 
 @app.route('/updateCar', methods=['GET', 'POST'])
 def updateCar():
-    
-    """
-    Admin updates car values by way of form, specifies car id and uses that
-    to identify which car is being updated. Values left blank will not be updated
-    """
-    
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1244,10 +1224,6 @@ def updateCar():
 @app.route('/deleteCar', methods=['GET', 'POST'])
 def deleteCar():
 
-    """
-    Admin specifies car id to delete which is removed from the databse.
-    """
-
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1280,9 +1256,6 @@ def deleteCar():
 
 @app.route('/editUser')
 def editUser():
-    """
-    default edit user page for the admin
-    """
     if session['typeOfUser'] == 'Admin':
         return render_template('editUser.html')
     else:
@@ -1290,10 +1263,6 @@ def editUser():
                  
 @app.route('/addUser', methods=['GET', 'POST'])
 def addUser():
-    """
-    Admin add user method to fill out a form that is then
-    inputted into the google database for further use
-    """
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1331,10 +1300,7 @@ def addUser():
 
 @app.route('/updateUser', methods=['GET', 'POST'])
 def updateUser():
-    """
-    Admin updates user values by way of form, specifies car id and uses that
-    to identify which user is being updated. Values left blank will not be updated
-    """
+
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1411,9 +1377,7 @@ def updateUser():
 
 @app.route('/deleteUser', methods=['GET', 'POST'])
 def deleteUser():
-    """
-    Admin specifies user id to delete which is removed from the databse.
-    """
+
     if session['typeOfUser'] == 'Admin':
         if request.method == 'POST':
 
@@ -1446,8 +1410,9 @@ def deleteUser():
 @app.route('/searchBooking', methods=['GET','POST'])
 def searchBooking():
     """
-    This route lets an admin search through the booking history for a specific
-    cars bookings.
+    This function will render the template for the cars available to
+    hire. It also you can also search for available cars based on
+    their attributes via a POST form in carQuery.
     """
     # Check if user is loggedin
     if session['typeOfUser'] == 'Admin':

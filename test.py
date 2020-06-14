@@ -3,6 +3,9 @@ import unittest
 
 
 class FlaskTestCase(unittest.TestCase):
+    """
+    Unit test 
+    """
 
     # Ensure that flask was set up correctly
     def test_index(self):
@@ -17,14 +20,56 @@ class FlaskTestCase(unittest.TestCase):
         self.assertIn(b'Login', response.data)
 
     # Ensure login behaves correctly with correct credentials
+    def test_correct_admin_login(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="admin1", password="admin1"),
+            follow_redirects=True
+        )
+        self.assertIn(b'Home page', response.data)
+
+    # Ensure login behaves correctly with correct credentials
+    def test_correct_engineer_login(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="Engineer1", password="Engineer1"),
+            follow_redirects=True
+        )
+        self.assertIn(b'Engineer Page', response.data)
+
+    # Ensure login behaves correctly with correct credentials
+    def test_correct_Manager_login(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="frank", password="frank"),
+            follow_redirects=True
+        )
+        self.assertIn(b'Manager', response.data)
+
+    # Ensure login behaves correctly with correct credentials
+    def test_correct_customer_login(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="Green", password="Green"),
+            follow_redirects=True
+        )
+        self.assertIn(b'User History', response.data)
+
+    # Ensure login behaves correctly with correct credentials
     def test_correct_login(self):
         tester = app.test_client()
         response = tester.post(
             '/',
-            data=dict(username="john", password="john"),
+            data=dict(username="admin1", password="admin1"),
             follow_redirects=True
         )
         self.assertIn(b'Home page', response.data)
+
+
 
     # Ensure login behaves correctly with incorrect credentials
     def test_incorrect_login(self):
@@ -57,7 +102,7 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client()
         response = tester.post(
             '/',
-            data=dict(username="john", password="john"),
+            data=dict(username="admin1", password="admin1"),
             follow_redirects=True
         )
         response = tester.get('/cars', follow_redirects=True)
@@ -68,7 +113,7 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client()
         response = tester.post(
             '/',
-            data=dict(username="john", password="john"),
+            data=dict(username="admin1", password="admin1"),
             follow_redirects=True
         )
         response = tester.get('/profile', follow_redirects=True)
@@ -79,7 +124,7 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client()
         response = tester.post(
             '/',
-            data=dict(username="john", password="john"),
+            data=dict(username="admin1", password="admin1"),
             follow_redirects=True
         )
         response = tester.get('/cars', follow_redirects=True)
@@ -90,7 +135,7 @@ class FlaskTestCase(unittest.TestCase):
         tester = app.test_client()
         response = tester.post(
             '/',
-            data=dict(username="john", password="john"),
+            data=dict(username="admin1", password="admin1"),
             follow_redirects=True
         )
         response = tester.get('/cars', follow_redirects=True)
@@ -101,9 +146,52 @@ class FlaskTestCase(unittest.TestCase):
         )
         response = tester.get('/cars', follow_redirects=True)
         self.assertIn(b'Honda', response.data)
+
+    # Ensure cars history table loads
+    def test_car_history(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="admin1", password="admin1"),
+            follow_redirects=True
+        )
+        response = tester.get('/home', follow_redirects=True)
+        self.assertIn(b'Booking Id', response.data)
     
-    
-    
+    # Ensure cars searchcorrectly
+    def test_search_user_correct(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="admin1", password="admin1"),
+            follow_redirects=True
+        )
+        response = tester.get('/searchDatabase', follow_redirects=True)
+        response = tester.post(
+            '/searchDatabase',
+            data=dict(firstName="admin1"),
+            follow_redirects=True
+        )
+        response = tester.get('/searchDatabase', follow_redirects=True)
+        self.assertIn(b'admin1', response.data)
+
+    # Ensure cars searchcorrectly
+    def test_search_user_correct(self):
+        tester = app.test_client()
+        response = tester.post(
+            '/',
+            data=dict(username="admin1", password="admin1"),
+            follow_redirects=True
+        )
+        response = tester.get('/searchDatabase', follow_redirects=True)
+        response = tester.post(
+            '/searchDatabase',
+            data=dict(firstName="admin1"),
+            follow_redirects=True
+        )
+        response = tester.get('/searchDatabase', follow_redirects=True)
+        self.assertIn(b'admin1', response.data)
+
 
 
 if __name__ == '__main__':

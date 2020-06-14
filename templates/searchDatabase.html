@@ -5,14 +5,14 @@
 <p>Search Cars and Users</p>
 
 <form action="{{ url_for('adminCarQuery') }}" method="post" autocomplete="off">
-	<input type="text" name="idCar" placeholder="Seach by id" id="idCar">
-	<input type="text" name="make" placeholder="Seach by make" id="make">
-	<input type="text" name="bodyType" placeholder="Seach by body type" id="bodyType">
-	<input type="text" name="colour" placeholder="Seach by colour" id="colour">
-	<input type="text" name="seats" placeholder="Seach by number of seats" id="seats">
-	<input type="text" name="location" placeholder="Seach by location" id="location">
-	<input type="text" name="cost" placeholder="Seach by cost per day" id="cost">
-	<input type="text" name="bookedBy" placeholder="Seach by user booked" id="bookedBy">
+	<input type="text" name="idCar" placeholder="Search by id" id="idCar">
+	<input type="text" name="make" placeholder="Search by make" id="make">
+	<input type="text" name="bodyType" placeholder="Search by body type" id="bodyType">
+	<input type="text" name="colour" placeholder="Search by colour" id="colour">
+	<input type="text" name="seats" placeholder="Search by number of seats" id="seats">
+	<input type="text" name="location" placeholder="Search by location" id="location">
+	<input type="text" name="cost" placeholder="Search by cost per day" id="cost">
+	<input type="text" name="bookedBy" placeholder="Search by user booked" id="bookedBy">
 	<div class="msg">{{ msg }}</div>
 	<input type="submit" value="Search">
 </form>
@@ -59,13 +59,13 @@
 
 
 <form action="{{ url_for('adminUserQuery') }}" method="post" autocomplete="off">
-	<input type="text" name="idUser" placeholder="Seach by id" id="idCar">
-	<input type="text" name="username" placeholder="Seach by make" id="make">
-	<input type="text" name="password" placeholder="Seach by body type" id="bodyType">
-	<input type="text" name="firstName" placeholder="Seach by colour" id="colour">
-	<input type="text" name="lastName" placeholder="Seach by number of seats" id="seats">
-	<input type="text" name="email" placeholder="Seach by location" id="location">
-	<input type="text" name="typeOfUser" placeholder="Seach by cost per day" id="cost">
+	<input type="text" name="idUser" placeholder="Search by id" id="idCar">
+	<input type="text" name="username" placeholder="Search by make" id="make">
+	<input type="text" name="password" placeholder="Search by body type" id="bodyType">
+	<input type="text" name="firstName" placeholder="Search by colour" id="colour">
+	<input type="text" name="lastName" placeholder="Search by number of seats" id="seats">
+	<input type="text" name="email" placeholder="Search by location" id="location">
+	<input type="text" name="typeOfUser" placeholder="Search by cost per day" id="cost">
 	<div class="msg">{{ msg }}</div>
 	<input type="submit" value="Search">
 </form>
