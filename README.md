@@ -9,9 +9,10 @@ Search Cars available for hire
 Make bookings and link their google calendar to tell them when they have their car
 Cancel existing bookings if need be
 
-#Login
-* Username: admin1
-* Password: admin1
+#Logins
+* Username: admin1, Password: admin1
+* Username: Engineer1, Password: Engineer1
+* Username: Manager1, Password: Manager1
 
 
 
