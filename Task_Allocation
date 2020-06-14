@@ -1,32 +1,50 @@
 Assignment 3
 
-Option to login for three types of Users (Peter)
+An option to login to the system for three type of users including admin,
+manager, engineer. They will be directed to different web pages regarding to their user
+type. (Peter)
 
-Admin login displays menu (Peter)
+Once the admin login successfully, the system should display a menu which
+will allow admin to manipulate the data regarding to users and cars.
+They will be able to:
+- View car rental history (Peter, Tim)
+- Search and view (Peter, Tim)
+- Add, remove and update (Peter)
+- Report cars with issue (Peter, Tim)
+- logout (Peter)
 
-Robust Input Validation (Tim)
+ Develop and implement a robust input validation scheme. (Tim)
 
-Design Databse (Joel & Peter)
+Design database and populate some data based on the requirements. (Joel & Peter)
 
-RESTful api (Peter)
+Create your own RESTful API to communicate with the cloud database (Peter)
 
-3 Different Visualizations (Joel)
+Design and demonstrate three different types of visualisation graph that matters
+to decision making in dashboard page (Joel)
 
-Send email to engineer (Peter & Taylor)
+Send an email to engineer’s email address using Pushbullet API when a vehicle
+with issue is reported by admin (Peter & Taylor)
 
-Report broken car (Tim & Taylor)
+Once the car is reported, the location of the car needs to show in Google Map of
+engineer’s page, which will guide engineer to find the car. (Tim & Taylor)
 
-Bluetooth identification system (Taylor)
+Implement an automatic identification system by using Bluetooth in AP, which
+will help engineer to finish their work easily (Taylor)
 
-Voice Recognition/Search Function (Taylor)
+Add the voice/search feature to search the cars in MP. This is for the admin who
+is looking to find a specific car. You must use the Google’s Assistant SDK to complete this
+part. (Taylor)
 
-QR reader retreives users profile (Taylor)
+Implement an object-detection console-based system in AP. The system can
+retrieve engineer’s profile by detecting QR code carried around. (Taylor)
 
 Unit Testing (Tim, Peter, Joel, Taylor)
 
-Sphinx Documentation (Joel)
+Complete documentation using Sphinx. (Joel)
 
-Github & Trello (Tim, Peter, Joel, Taylor)
+Professional use of
+• GitHub from day 1 of the development (Tim, Peter, Joel, Taylor)
+• Trello board for the development cycle (Tim, Peter, Joel, Taylor)
 
 
 
