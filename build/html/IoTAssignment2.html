@@ -86,47 +86,54 @@ Verifies Users Credentials,</p>
 <dl class="py function">
 <dt id="IoTAssignment2.api.addCar">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">addCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.addCar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin add car method to fill out a form that is then
+inputted into the google database for further hire by users</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.addUser">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">addUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.addUser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin add user method to fill out a form that is then
+inputted into the google database for further use</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.adminCarQuery">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">adminCarQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.adminCarQuery" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function takes the data from a form and builds an sql query based
-on what variation of attribute admin was looking for.
-querying users and cars table for admins
-It is probably susceptible to an SQL injection at the moment but will
-hopefully in the future provide a more robust input validation scheme.</p>
+on what variation of car attributes admin was looking for.
+Querying users and cars table for admins</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.adminUserQuery">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">adminUserQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.adminUserQuery" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function takes the data from a form and builds an sql query based
-on what variation of attribute user was looking for.
+on what variation of user attributes admin was looking for.
 If the form is blank it returns all the users available like the users route.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.cancelBooking">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">cancelBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.cancelBooking" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>User inputs the booking id that they want to cancel which is then updated in the
+google sql database and also the google calender event gets cancelled</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.carBooking">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">carBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.carBooking" title="Permalink to this definition">¶</a></dt>
-<dd><p>User will book a car by posting to the booking and car tables</p>
+<dd><p>User inputs car by id they want to book and number of days and the session variable
+is parsed as well as the form data and creates an sql update in the database to
+allocate that car to them and also creates a google calendar event for that user.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.carManagement">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">carManagement</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.carManagement" title="Permalink to this definition">¶</a></dt>
 <dd><p>An admin function that will let admin’s perform database operations
-that regular users should not be able to.</p>
+that regular users should not be able to.
+Legacy route</p>
 </dd></dl>
 
 <dl class="py function">
@@ -150,22 +157,26 @@ their attributes via a POST form in carQuery.</p>
 <dl class="py function">
 <dt id="IoTAssignment2.api.deleteCar">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">deleteCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.deleteCar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin specifies car id to delete which is removed from the databse.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.deleteUser">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">deleteUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.deleteUser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin specifies user id to delete which is removed from the databse.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.editCar">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">editCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.editCar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>default edit car page for the admin</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.editUser">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">editUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.editUser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>default edit user page for the admin</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.get_calendar_service">
@@ -219,14 +230,16 @@ to the database and a new user will be registered.</p>
 <dl class="py function">
 <dt id="IoTAssignment2.api.reportCar">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">reportCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.reportCar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin uses this route to issue a notification for an engineer to fix the car by
+updating the broken column on a car by filling out a form and sending the data
+to the google database.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.searchBooking">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">searchBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.searchBooking" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function will render the template for the cars available to
-hire. It also you can also search for available cars based on
-their attributes via a POST form in carQuery.</p>
+<dd><p>This route lets an admin search through the booking history for a specific
+cars bookings.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -238,17 +251,21 @@ their attributes via a POST form in carQuery.</p>
 <dl class="py function">
 <dt id="IoTAssignment2.api.updateCar">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">updateCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.updateCar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin updates car values by way of form, specifies car id and uses that
+to identify which car is being updated. Values left blank will not be updated</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.updateUser">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">updateUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.updateUser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Admin updates user values by way of form, specifies car id and uses that
+to identify which user is being updated. Values left blank will not be updated</p>
+</dd></dl>
 
 <dl class="py function">
 <dt id="IoTAssignment2.api.userhistory">
 <code class="sig-prename descclassname">IoTAssignment2.api.</code><code class="sig-name descname">userhistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#IoTAssignment2.api.userhistory" title="Permalink to this definition">¶</a></dt>
-<dd><p>User will display history of bookings</p>
+<dd><p>Method to display history of bookings</p>
 </dd></dl>
 
 </div>
@@ -299,7 +316,7 @@ car is unlocked. Database is updated.</p>
 
 <dl class="py attribute">
 <dt id="IoTAssignment2.dbEngineer.engineer.connection">
-<code class="sig-name descname">connection</code><em class="property"> = &lt;_mysql.connection open to '35.244.72.137' at 0x1a2fca8&gt;</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.connection" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">connection</code><em class="property"> = &lt;_mysql.connection open to '35.244.72.137' at 0xf05b80&gt;</em><a class="headerlink" href="#IoTAssignment2.dbEngineer.engineer.connection" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
