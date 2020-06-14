@@ -2,8 +2,17 @@
 ###### Peter, Tim, Taylor, Joel
 ## Car Rental Service
 
-This repo aims to solve the assignment 2 of Internet of Things describing a car rental system
+This repo aims to solve the assignment 3 of Internet of Things describing a car rental system
 hosted on a raspberry pi and accessed through a combination of a Flask webapp and API.
+Users will be able to register an account and login.
+Search Cars available for hire
+Make bookings and link their google calendar to tell them when they have their car
+Cancel existing bookings if need be
+
+#Login
+* Username: admin1
+* Password: admin1
+
 
 
 ##### Installation:
