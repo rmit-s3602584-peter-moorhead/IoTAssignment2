@@ -1,3 +1,37 @@
+Assignment 3
+
+Option to login for three types of Users (Peter)
+
+Admin login displays menu (Peter)
+
+Robust Input Validation (Tim)
+
+Design Databse (Joel & Peter)
+
+RESTful api (Peter)
+
+3 Different Visualizations (Joel)
+
+Send email to engineer (Peter & Taylor)
+
+Report broken car (Tim & Taylor)
+
+Bluetooth identification system (Taylor)
+
+Voice Recognition/Search Function (Taylor)
+
+QR reader retreives users profile (Taylor)
+
+Unit Testing (Tim, Peter, Joel, Taylor)
+
+Sphinx Documentation (Joel)
+
+Github & Trello (Tim, Peter, Joel, Taylor)
+
+
+
+Assignment 2
+
 An option to register a new user on MP. The username, password and other
 necessary details (first name, last name and email) must be stored on cloud database. (Peter)
 
