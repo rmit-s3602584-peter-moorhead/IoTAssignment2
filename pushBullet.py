@@ -1,9 +1,10 @@
-import socket
+#References
+#RMIT Programming Internet of Things Tutorial code achive
+
 import datetime
 import requests
-import json
-import os
 import time
+import json
 
 
 ACCESS_TOKEN="o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
@@ -44,11 +45,5 @@ def send(title, body):
             raise Exception('Something wrong')
         else:
             print('complete sending')
-            
-            
-            
-<<<<<<< HEAD
-#pushBullet()
-=======
-#pushBullet()
->>>>>>> 4e27857d31acfc45b9503ed65a5001a24d4a210c
+
+
