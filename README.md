@@ -35,3 +35,10 @@ python3 -m venv venv
 
 ![Trello](/images/trello.PNG)
 
+
+## Github usage
+
+
+## Testing
+
+move the test.py to the level above the project folder and run python3 test.py
