@@ -14,8 +14,6 @@ Cancel existing bookings if need be
 * Username: Engineer1, Password: Engineer1
 * Username: Manager1, Password: Manager1
 
-
-
 ##### Installation:
 
 clone repo
@@ -32,3 +30,8 @@ python3 -m venv venv
 (venv) pip install -e .
 (venv) flask run --host=0.0.0.0
 ```
+
+## Trello usage
+
+![Trello](images/trello.png)
+
