@@ -37,9 +37,9 @@ python3 -m venv venv
 
 ## Github usage
 
+![Trello](/images/chill.PNG)
 ![Trello](/images/branches.PNG)
 ![Trello](/images/commits.PNG)
-![Trello](/images/githubstats.PNG)
 
 ## Testing
 
