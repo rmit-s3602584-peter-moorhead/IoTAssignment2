@@ -1,5 +1,5 @@
 # Internet of Things Assignment 2
-###### Peter s3602584, Taylor s3603013, Tim s3603837, Joel s3758729
+###### Peter Moorhead s3602584, Taylor Cairns s3603013, Timothy Dalzotto s3603837, Joel Liang Shien Tan s3758729
 ## Car Rental Service
 
 This repo aims to solve the assignment 3 of Internet of Things describing a car rental system
