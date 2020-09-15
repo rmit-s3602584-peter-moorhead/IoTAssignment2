@@ -7,9 +7,7 @@ import time
 import json
 
 
-ACCESS_TOKEN="o.DKJYYAlco6vYNs09Crn7jdR1bRtyAo5k"
-
-#ACCESS_TOKEN = "o.GAWSGwtueYnZUAUCnkolGM3u7qg8iGmC"
+ACCESS_TOKEN="put pushbullet token here"
 
 def pushBullet():
     """
